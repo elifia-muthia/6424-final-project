@@ -5,5 +5,10 @@ module stall_mgmt (
     input  wire to_stall_mgmt,
     output wire stall_output
 );
-    // Stall management logic placeholder
+    always @(posedge clk or posedge reset) begin
+        if (reset)
+            stall_output <= 0; // no stall
+        else
+            stall_output <= stall_input | (stall_output & to_stall_mgmt); // start stalling if requested or stay stalled if buffer is still full
+    end
 endmodule
