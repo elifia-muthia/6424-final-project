@@ -1,5 +1,5 @@
-# Use Debian Bookworm slim as the base image
-FROM debian:bookworm-slim
+# Use an Ubuntu base image
+FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
