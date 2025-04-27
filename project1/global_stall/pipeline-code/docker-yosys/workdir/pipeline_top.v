@@ -4,28 +4,28 @@ module pipeline_top (
     input  wire [31:0]  inputs,
     input  wire         in_valid,
     input  wire         flush,
+    input  wire         arbiter_grant,
+    input  wire [31:0]  resource_output,
+
     output wire [31:0]  outputs,
     output wire         out_valid,
     output wire         arbiter_req,
-    input  wire         arbiter_grant,
-    output wire [31:0]  resource_input,
-    input  wire [31:0]  resource_output
+    output wire [31:0]  resource_input
 );
 
     wire [31:0] pipeline_unit_outputs;
     wire stall_signal;
     wire to_stall_mgmt_signal;
     wire _in_valid, _out_valid;
+    wire [31:0] outputs_buffer;
 
     // Assign and manage valid signals
-    assing in_valid  = ... 
-    assign out_valid = ...
 
     pipeline_unit pipeline_unit_inst (
         .clk      (clk),
         .reset    (reset),
         .inputs   (inputs),
-        .in_valid (_in_valid),
+        .in_valid (in_valid),
         .flush    (flush),
         .outputs  (pipeline_unit_outputs),
         .out_valid(_out_valid)
@@ -35,9 +35,12 @@ module pipeline_top (
         .clk           (clk),
         .reset         (reset),
         .inputs        (pipeline_unit_outputs),
+        .in_valid      (_out_valid),
         .stall         (stall_signal),
-        .outputs       (outputs),
-        .to_stall_mgmt (to_stall_mgmt_signal)
+        .outputs       (outputs_buffer),
+        .to_stall_mgmt (to_stall_mgmt_signal),
+        .flush         (flush),
+        .out_valid     (out_valid)
     );
 
     stall_mgmt stall_mgmt_inst (
@@ -48,16 +51,20 @@ module pipeline_top (
         .stall_output  (stall_signal)
     );
 
-    flush_mgmt flush_mgmt_inst (
+    /* flush_mgmt flush_mgmt_inst (
         .clk               (clk),
         .reset             (reset),
         .flush_mgmt_input  (flush),
         .flush_mgmt_output () // Connect as necessary
     );
+    */
 
     // Placeholder signals to demonstrate arbiter interaction
-    assign arbiter_req    = /* pipeline logic request */;
-    assign resource_input = /* pipeline logic output for shared resource */;
+    assign arbiter_req    = out_valid;
+    assign resource_input = outputs_buffer;
+    
     // Use resource_output as necessary within the pipeline logic
+    assign resource_output = outputs;
+ 
 
 endmodule
