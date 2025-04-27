@@ -12,7 +12,7 @@ RUN echo "Acquire::http::Pipeline-Depth 0;" > /etc/apt/apt.conf.d/99custom \
     python3.11 \
     python3.11-dev \
     python3-pip \
-    python3-venv \
+    python3.11-venv \
     build-essential \
     libsqlcipher-dev \
     sqlite3 \
