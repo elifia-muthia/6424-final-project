@@ -39,7 +39,6 @@ docker pull "${CONTAINER_IMAGE}"
 echo "Running container..."
 docker run -d \
   --name fithealth \
-  --cap-add=INTEL_TDX \
   --device=/dev/tdx_guest \
   -e SECRET_NAME="${SECRET_NAME}" \
   -e GOOGLE_APPLICATION_CREDENTIALS="/etc/google/auth/application_default_credentials.json" \
