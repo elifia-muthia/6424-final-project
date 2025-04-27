@@ -2,12 +2,12 @@
 set -euo pipefail
 
 PROJECT_ID="fithealthtdx"
-ZONE="us-central1-a"
+ZONE="us-east5-b"
 INSTANCE_NAME="fithealth-tdx-vm"
 MACHINE_TYPE="c3-standard-4"
-IMAGE_PROJECT="debian-cloud"
-IMAGE_FAMILY="debian-12"
-CONTAINER_IMAGE="gcr.io/${PROJECT_ID}/fithealth:latest"
+IMAGE_PROJECT="ubuntu-os-cloud"
+IMAGE_FAMILY="ubuntu-2204-lts"
+CONTAINER_IMAGE="us-central1-docker.pkg.dev/${PROJECT_ID}/fithealth-repo/fithealth:latest"
 SECRET_NAME="projects/${PROJECT_ID}/secrets/fithealth-sqlcipher-key"
 STARTUP_SCRIPT="startup_fithealth.sh"
 FIREWALL_RULE="allow-fithealth-http"
@@ -29,14 +29,15 @@ gcloud compute instances create ${INSTANCE_NAME} \
   --project=${PROJECT_ID} \
   --zone=${ZONE} \
   --machine-type=${MACHINE_TYPE} \
-  --min-cpu-platform="Intel Ice Lake" \
-  --confidential-compute \
+  --maintenance-policy TERMINATE \
+  --confidential-compute-type=TDX \
   --image-family=${IMAGE_FAMILY} \
   --image-project=${IMAGE_PROJECT} \
   --boot-disk-size=50GB \
   --metadata-from-file=startup-script=${STARTUP_SCRIPT} \
   --metadata=CONTAINER_IMAGE=${CONTAINER_IMAGE},SECRET_NAME=${SECRET_NAME} \
-  --scopes=cloud-platform
+  --scopes=cloud-platform \
+  --service-account=fithealth-vm-sa@fithealthtdx.iam.gserviceaccount.com
 
 echo "Waiting ~60s for VM initialization..."
 sleep 60

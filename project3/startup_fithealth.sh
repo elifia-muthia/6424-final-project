@@ -1,34 +1,42 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Fetch metadata
+LOGFILE="/var/log/fithealth-startup.log"
+exec > >(tee -a "$LOGFILE") 2>&1
+
+echo "Fetching metadata..."
 CONTAINER_IMAGE="$(curl -s -H 'Metadata-Flavor: Google' \
   http://metadata.google.internal/computeMetadata/v1/instance/attributes/CONTAINER_IMAGE)"
 SECRET_NAME="$(curl -s -H 'Metadata-Flavor: Google' \
   http://metadata.google.internal/computeMetadata/v1/instance/attributes/SECRET_NAME)"
 
-# 1. Install packages
+echo "Updating packages and installing dependencies..."
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
   apt-transport-https ca-certificates curl gnupg lsb-release \
   python3 python3-pip software-properties-common
 
-# 2. Install Docker
-curl -fsSL https://download.docker.com/linux/debian/gpg \
-  | gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg
-echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
+echo "Installing Docker..."
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg
+echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
   > /etc/apt/sources.list.d/docker.list
 apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io
 
-# 3. Install Intel TDX CLI
-curl -fsSL https://downloads.intel.com/tdx-attestation/cli/install.sh | bash
+echo "Waiting for Docker service to start..."
+systemctl start docker
+systemctl enable docker
+sleep 5
 
-# 4. Prepare data volume
-mkdir -p /mnt/data
+echo "Docker version:"
+docker --version
 
-# 5. Run container (plain HTTP, no certs)
-docker pull ${CONTAINER_IMAGE}
+gcloud auth configure-docker us-central1-docker.pkg.dev
+
+echo "Pulling container image: ${CONTAINER_IMAGE}"
+docker pull "${CONTAINER_IMAGE}"
+
+echo "Running container..."
 docker run -d \
   --name fithealth \
   --cap-add=INTEL_TDX \
@@ -37,7 +45,8 @@ docker run -d \
   -e GOOGLE_APPLICATION_CREDENTIALS="/etc/google/auth/application_default_credentials.json" \
   -v /mnt/data:/data \
   -p 80:80 \
-  ${CONTAINER_IMAGE}
+  "${CONTAINER_IMAGE}"
 
-# 6. Stream logs
-docker logs -f fithealth
+echo "Container started successfully."
+
+echo "Setup complete."
