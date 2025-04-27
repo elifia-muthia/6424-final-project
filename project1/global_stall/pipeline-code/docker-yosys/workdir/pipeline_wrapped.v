@@ -37,24 +37,19 @@ module pipeline_wrapped (
         .clk             (clk),
         .reset           (reset),
         .resource_input  (arbiter_grant_1 ? resource_input_1 : resource_input_2),
+        .in_valid        (arbiter_grant_1 ? _out_valid_1 : _out_valid_2),
+        .out_valid       (out_valid),
         .resource_output (resource_output)
     );
 
-    wire _in_valid_1, _out_valid_1;
-    wire _in_valid_2, _out_valid_2;
-
-    // Assign and manage valid signals
-    assing _in_valid_1  = ... 
-    assign _out_valid_1 = ...
-    assing _in_valid_2  = ... 
-    assign _out_valid_2 = ...
+    wire _out_valid_1, out_valid_2;
 
     // Instantiate pipeline 1
     pipeline_top pipeline_1 (
         .clk      (clk),
         .reset    (reset),
         .inputs   (pipeline1_inputs),
-        .in_valid (_in_valid_1)
+        .in_valid (in_valid),
         .flush    (flush_1),
         .outputs  (pipeline1_outputs),
         .out_valid(_out_valid_1),
@@ -69,7 +64,7 @@ module pipeline_wrapped (
         .clk      (clk),
         .reset    (reset),
         .inputs   (pipeline2_inputs),
-        .in_valid (_in_valid_2)
+        .in_valid (in_valid),
         .flush    (flush_2),
         .outputs  (pipeline2_outputs),
         .out_valid(_out_valid_2),

@@ -2,7 +2,7 @@ module stall_mgmt (
     input  wire clk,
     input  wire reset,
     input  wire stall_input,
-    input  wire to_stall_mgmt,
+    input  wire to_stall_mgmt, //from buffer
     output wire stall_output
 );
     always @(posedge clk or posedge reset) begin
