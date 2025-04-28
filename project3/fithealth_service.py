@@ -11,11 +11,11 @@ GOOGLE_CREDENTIALS = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 
 app = Flask(__name__)
 
+TDX_CLI = '/usr/bin/ta-client'
+
 def get_tdx_quote():
-    # Generate TDX quote using Intel Trust Authority CLI
-    subprocess.run(['ta-client', 'quote', '--output', 'quote.bin'], check=True)
-    with open('quote.bin','rb') as f:
-        return f.read()
+    subprocess.run([TDX_CLI, 'quote', '--output', 'quote.bin'], check=True)
+    return open('quote.bin', 'rb').read()
 
 def verify_quote_and_get_key():
     quote = get_tdx_quote()
