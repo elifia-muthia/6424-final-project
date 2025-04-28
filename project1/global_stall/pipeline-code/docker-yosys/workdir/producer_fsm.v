@@ -22,9 +22,6 @@ assign {flush_2, flush_1} = flush;
 
 reg [31:0] counter_1, counter_2;
 
-
-// Producer logic placeholder
-
 always @(posedge clk or posedge reset) begin
     if(reset) begin
         valid <= 0;

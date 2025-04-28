@@ -1,6 +1,7 @@
 module top_system (
     input wire clk,
-    input wire reset
+    input wire reset,
+    output wire [31:0] out_data_1, out_data_2
 );
 
     // Wires connecting producer, pipeline, and consumer
@@ -48,7 +49,9 @@ module top_system (
         .reset              (reset),
         .pipeline1_outputs  (pipeline1_outputs),
         .pipeline2_outputs  (pipeline2_outputs),
-        .valid(out_valid)
-    );
+        .valid(out_valid),
+        .out_data_1(out_data_1),
+        .out_data_2(out_data_2),
+    )
 
 endmodule
