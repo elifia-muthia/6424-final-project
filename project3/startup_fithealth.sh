@@ -39,10 +39,8 @@ echo "Preparing directories..."
 mkdir -p /mnt/data /certs
 
 echo "Fetching TLS certificates from GCS..."
-gcloud storage objects copy \
-  gs://fithealthtdx-certs/server.crt /certs/server.crt
-gcloud storage objects copy \
-  gs://fithealthtdx-certs/server.key  /certs/server.key
+gsutil cp gs://fithealthtdx-certs/server.crt /certs/server.crt
+gsutil cp gs://fithealthtdx-certs/server.key  /certs/server.key
 chmod 600 /certs/server.key
 
 echo "Pulling and running FitHealth container over HTTPS..."
