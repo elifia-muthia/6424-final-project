@@ -10,42 +10,51 @@ CONTAINER_IMAGE="$(curl -s -H 'Metadata-Flavor: Google' \
 SECRET_NAME="$(curl -s -H 'Metadata-Flavor: Google' \
   http://metadata.google.internal/computeMetadata/v1/instance/attributes/SECRET_NAME)"
 
-echo "Updating packages and installing dependencies..."
+echo "Installing Docker..."
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
-  apt-transport-https ca-certificates curl gnupg lsb-release \
-  python3 python3-pip software-properties-common
+  apt-transport-https ca-certificates curl gnupg lsb-release software-properties-common
 
-echo "Installing Docker..."
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg
-echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+# Docker repo & install
+install -m0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+  | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+   https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
   > /etc/apt/sources.list.d/docker.list
 apt-get update
-apt-get install -y docker-ce docker-ce-cli containerd.io
+DEBIAN_FRONTEND=noninteractive apt-get install -y \
+  docker-ce docker-ce-cli containerd.io
 
-echo "Waiting for Docker service to start..."
-systemctl start docker
-systemctl enable docker
+echo "Starting Docker..."
+systemctl enable --now docker
 sleep 5
-
-echo "Docker version:"
 docker --version
 
+echo "Configuring gcloud auth for Artifact Registry..."
 gcloud auth configure-docker us-central1-docker.pkg.dev
 
-echo "Pulling container image: ${CONTAINER_IMAGE}"
-docker pull "${CONTAINER_IMAGE}"
+echo "Preparing directories..."
+mkdir -p /mnt/data /certs
 
-echo "Running container..."
+echo "Fetching TLS certificates from GCS..."
+gcloud storage objects copy \
+  gs://fithealthtdx-certs/server.crt /certs/server.crt
+gcloud storage objects copy \
+  gs://fithealthtdx-certs/server.key  /certs/server.key
+chmod 600 /certs/server.key
+
+echo "Pulling and running FitHealth container over HTTPS..."
+docker pull "${CONTAINER_IMAGE}"
 docker run -d \
   --name fithealth \
   --device=/dev/tdx_guest \
   -e SECRET_NAME="${SECRET_NAME}" \
   -e GOOGLE_APPLICATION_CREDENTIALS="/etc/google/auth/application_default_credentials.json" \
   -v /mnt/data:/data \
-  -p 80:80 \
+  -v /certs:/certs:ro \
+  -p 443:443 \
   "${CONTAINER_IMAGE}"
 
-echo "Container started successfully."
-
-echo "Setup complete."
+echo "FitHealth service started on HTTPS port 443."

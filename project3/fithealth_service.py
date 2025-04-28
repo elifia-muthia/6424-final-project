@@ -90,5 +90,5 @@ def fetch_record(user_id):
     return jsonify(dict(zip(keys, row)))
 
 if __name__ == '__main__':
-    # Plain HTTP on port 80
-    app.run(host='0.0.0.0', port=80)
+    ctx=('/certs/server.crt','/certs/server.key')
+    app.run(host='0.0.0.0',port=443,ssl_context=ctx)

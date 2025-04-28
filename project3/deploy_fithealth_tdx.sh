@@ -10,7 +10,7 @@ IMAGE_FAMILY="ubuntu-2204-lts"
 CONTAINER_IMAGE="us-central1-docker.pkg.dev/${PROJECT_ID}/fithealth-repo/fithealth:latest"
 SECRET_NAME="projects/${PROJECT_ID}/secrets/fithealth-sqlcipher-key"
 STARTUP_SCRIPT="startup_fithealth.sh"
-FIREWALL_RULE="allow-fithealth-http"
+FIREWALL_RULE="allow-fithealth-https"
 
 # 1. Firewall for HTTP port 80
 if ! gcloud compute firewall-rules list --filter="name=${FIREWALL_RULE}" \
@@ -19,9 +19,9 @@ if ! gcloud compute firewall-rules list --filter="name=${FIREWALL_RULE}" \
     --project=${PROJECT_ID} \
     --direction=INGRESS \
     --action=ALLOW \
-    --rules=tcp:80 \
+    --rules=tcp:443 \
     --source-ranges=0.0.0.0/0 \
-    --description="Allow HTTP to FitHealth service"
+    --description="Allow HTTPs to FitHealth service"
 fi
 
 # 2. Create Confidential VM
@@ -37,7 +37,7 @@ gcloud compute instances create ${INSTANCE_NAME} \
   --metadata-from-file=startup-script=${STARTUP_SCRIPT} \
   --metadata=CONTAINER_IMAGE=${CONTAINER_IMAGE},SECRET_NAME=${SECRET_NAME} \
   --scopes=cloud-platform \
-  --service-account=fithealth-vm-sa@fithealthtdx.iam.gserviceaccount.com
+  --service-account=fithealth-vm-sa@${PROJECT_ID}.iam.gserviceaccount.com
 
 echo "Waiting ~60s for VM initialization..."
 sleep 60
