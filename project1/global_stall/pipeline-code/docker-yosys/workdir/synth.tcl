@@ -1,7 +1,7 @@
 yosys -import
 
 # Specify the top module of the design
-set top_module project1_top
+set top_module top
 
 # Specify the design files
 set verilog_files *.v

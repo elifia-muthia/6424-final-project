@@ -1,4 +1,4 @@
-module project1_top (
+module top (
     input wire clk,
     input wire reset,
     output wire [31:0] out_data_1, out_data_2
