@@ -37,7 +37,7 @@ module pipeline_wrapped (
         .clk             (clk),
         .reset           (reset),
         .resource_input  (arbiter_grant_1 ? resource_input_1 : resource_input_2),
-        .in_valid        (arbiter_grant_1 ? _out_valid_1 : _out_valid_2),
+        .in_valid        ({_out_valid_2, _out_valid_1}),
         .out_valid       (out_valid),
         .resource_output (resource_output)
     );
@@ -49,7 +49,7 @@ module pipeline_wrapped (
         .clk      (clk),
         .reset    (reset),
         .inputs   (pipeline1_inputs),
-        .in_valid (in_valid),
+        .in_valid (in_valid[0]),
         .flush    (flush_1),
         .outputs  (pipeline1_outputs),
         .out_valid(_out_valid_1),
@@ -64,7 +64,7 @@ module pipeline_wrapped (
         .clk      (clk),
         .reset    (reset),
         .inputs   (pipeline2_inputs),
-        .in_valid (in_valid),
+        .in_valid (in_valid[1]),
         .flush    (flush_2),
         .outputs  (pipeline2_outputs),
         .out_valid(_out_valid_2),

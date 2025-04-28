@@ -64,7 +64,7 @@ module pipeline_top (
     assign resource_input = outputs_buffer;
     
     // Use resource_output as necessary within the pipeline logic
-    assign resource_output = outputs;
+    assign outputs = resource_output;
  
 
 endmodule
