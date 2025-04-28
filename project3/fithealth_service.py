@@ -11,7 +11,7 @@ GOOGLE_CREDENTIALS = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 
 app = Flask(__name__)
 
-TDX_CLI = '/usr/bin/ta-client'
+TDX_CLI = '/usr/bin/trustauthority-cli'
 
 def get_tdx_quote():
     subprocess.run([TDX_CLI, 'quote', '--output', 'quote.bin'], check=True)

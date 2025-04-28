@@ -52,7 +52,6 @@ docker run -d \
   -e GOOGLE_APPLICATION_CREDENTIALS="/etc/google/auth/application_default_credentials.json" \
   -v /mnt/data:/data \
   -v /certs:/certs:ro \
-  -v /usr/bin/trustauthority-cli:/usr/local/bin/ta-client:ro \
   -p 443:443 \
   "${CONTAINER_IMAGE}"
 
