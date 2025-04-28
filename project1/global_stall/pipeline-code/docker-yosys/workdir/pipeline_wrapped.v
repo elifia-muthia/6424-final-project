@@ -8,7 +8,7 @@ module pipeline_wrapped (
     input  wire        flush_2,
     output wire [31:0] pipeline1_outputs,
     output wire [31:0] pipeline2_outputs,
-    output wire [1:0]  out_valid
+    output wire [1:0]  out_valid,
 );
 
     // Internal signals for arbiter requests and grants
@@ -16,11 +16,15 @@ module pipeline_wrapped (
     wire arbiter_req_2;
     wire arbiter_grant_1;
     wire arbiter_grant_2;
+    wire stall_1;
+    wire stall_2;
+
 
     // Signals for pipelines to communicate with shared resource
     wire [31:0] resource_input_1;
     wire [31:0] resource_input_2;
     wire [31:0] resource_output;
+
 
     // Instantiate arbiter
     arbiter arbiter_inst (
@@ -56,7 +60,8 @@ module pipeline_wrapped (
         .arbiter_req      (arbiter_req_1),
         .arbiter_grant    (arbiter_grant_1),
         .resource_input   (resource_input_1),
-        .resource_output  (resource_output)
+        .resource_output  (resource_output),
+        .stall_signal(stall_1)
     );
 
     // Instantiate pipeline 2
@@ -71,7 +76,8 @@ module pipeline_wrapped (
         .arbiter_req      (arbiter_req_2),
         .arbiter_grant    (arbiter_grant_2),
         .resource_input   (resource_input_2),
-        .resource_output  (resource_output)
+        .resource_output  (resource_output),
+        .stall_signal(stall_2)
     );
 
 endmodule

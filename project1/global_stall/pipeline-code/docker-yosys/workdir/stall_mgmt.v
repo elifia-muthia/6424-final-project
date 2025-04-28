@@ -9,6 +9,6 @@ module stall_mgmt (
         if (reset)
             stall_output <= 0; // no stall
         else
-            stall_output <= stall_input | (stall_output & to_stall_mgmt); // start stalling if requested or stay stalled if buffer is still full
+            stall_output <= stall_input & to_stall_mgmt; // start stalling if buffer is still full
     end
 endmodule

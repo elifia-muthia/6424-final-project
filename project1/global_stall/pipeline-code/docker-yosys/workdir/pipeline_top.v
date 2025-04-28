@@ -10,7 +10,9 @@ module pipeline_top (
     output wire [31:0]  outputs,
     output wire         out_valid,
     output wire         arbiter_req,
-    output wire [31:0]  resource_input
+    output wire [31:0]  resource_input,
+    output wire stall_signal
+
 );
 
     wire [31:0] pipeline_unit_outputs;
@@ -27,6 +29,7 @@ module pipeline_top (
         .inputs   (inputs),
         .in_valid (in_valid),
         .flush    (flush),
+        .stall    (stall_signal).
         .outputs  (pipeline_unit_outputs),
         .out_valid(_out_valid)
     );
@@ -36,7 +39,7 @@ module pipeline_top (
         .reset         (reset),
         .inputs        (pipeline_unit_outputs),
         .in_valid      (_out_valid),
-        .stall         (stall_signal),
+        .stall         (~arbiter_grant),
         .outputs       (outputs_buffer),
         .to_stall_mgmt (to_stall_mgmt_signal),
         .flush         (flush),
@@ -46,7 +49,7 @@ module pipeline_top (
     stall_mgmt stall_mgmt_inst (
         .clk           (clk),
         .reset         (reset),
-        .stall_input   (stall_signal),
+        .stall_input   (~arbiter_grant),
         .to_stall_mgmt (to_stall_mgmt_signal),
         .stall_output  (stall_signal)
     );

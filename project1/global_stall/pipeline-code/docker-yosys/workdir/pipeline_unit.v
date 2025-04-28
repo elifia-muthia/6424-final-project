@@ -4,6 +4,7 @@ module pipeline_unit (
     input  wire [31:0]  inputs,
     input  wire         in_valid,
     input  wire         flush,
+    input wire stall,
     output wire [31:0]  outputs, 
     output wire         out_valid
 );

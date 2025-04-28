@@ -12,6 +12,8 @@ module top_system (
     wire flush_2;
     wire [1:0] in_valid;
     wire [1:0] out_valid;
+    wire stall_1;
+    wire stall_2;
 
     // Instantiate Producer
     producer_fsm producer_inst (
@@ -35,7 +37,9 @@ module top_system (
         .flush_2            (flush_2),
         .pipeline1_outputs  (pipeline1_outputs),
         .pipeline2_outputs  (pipeline2_outputs),
-        .out_valid          (out_valid)
+        .out_valid          (out_valid),
+        .stall_1(stall_1),
+        .stall_2(stall_2)
     );
 
     // Instantiate Consumer
