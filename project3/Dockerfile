@@ -26,7 +26,7 @@ RUN /opt/venv/bin/pip install --upgrade pip \
  && /opt/venv/bin/pip install --no-cache-dir -r /app/requirements.txt
 
 # 4. Install Intel TDX CLI
-RUN curl -fsSL https://downloads.intel.com/tdx-attestation/cli/install.sh | bash
+RUN curl -fsSL https://github.com/intel/trustauthority-client-for-go/raw/refs/heads/main/release/install-tdx-cli.sh | bash
 
 # 5. Install Google Cloud SDK
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" \
