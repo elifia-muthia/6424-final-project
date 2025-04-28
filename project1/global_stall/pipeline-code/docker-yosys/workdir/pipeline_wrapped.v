@@ -9,6 +9,8 @@ module pipeline_wrapped (
     output wire [31:0] pipeline1_outputs,
     output wire [31:0] pipeline2_outputs,
     output wire [1:0]  out_valid,
+    output wire        stall_1,
+    output wire        stall_2
 );
 
     // Internal signals for arbiter requests and grants
@@ -16,8 +18,8 @@ module pipeline_wrapped (
     wire arbiter_req_2;
     wire arbiter_grant_1;
     wire arbiter_grant_2;
-    wire stall_1;
-    wire stall_2;
+    wire _out_valid_1;
+    wire _out_valid_2;
 
 
     // Signals for pipelines to communicate with shared resource

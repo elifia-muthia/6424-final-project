@@ -29,7 +29,7 @@ module pipeline_top (
         .inputs   (inputs),
         .in_valid (in_valid),
         .flush    (flush),
-        .stall    (stall_signal).
+        .stall    (stall_signal),
         .outputs  (pipeline_unit_outputs),
         .out_valid(_out_valid)
     );

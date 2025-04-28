@@ -10,15 +10,17 @@ module shared_resource (
 );
 
 reg [1:0] output_valid;
+reg [31:0] output_data;
 assign out_valid = output_valid;
+assign resource_output = output_data;
 
 always @(posedge clk or posedge reset) begin
         if (reset) begin
-                resource_output <= 0;
+                output_data <= 0;
                 output_valid <= 0;
         end else begin
-                resource_output <= 2 * resource_input;
-                output_valid <= input_valid;
+                output_data <= 2 * resource_input;
+                output_valid <= in_valid;
         end
 end
 

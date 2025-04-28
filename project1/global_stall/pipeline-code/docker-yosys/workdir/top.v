@@ -1,4 +1,4 @@
-module top_system (
+module project1_top (
     input wire clk,
     input wire reset,
     output wire [31:0] out_data_1, out_data_2
@@ -52,6 +52,6 @@ module top_system (
         .valid(out_valid),
         .out_data_1(out_data_1),
         .out_data_2(out_data_2),
-    )
+    );
 
 endmodule
