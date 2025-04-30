@@ -14,8 +14,16 @@ app = Flask(__name__)
 TDX_CLI = '/usr/bin/trustauthority-cli'
 
 def get_tdx_quote():
-    subprocess.run([TDX_CLI, 'quote', '--output', 'quote.bin'], check=True)
-    return open('quote.bin', 'rb').read()
+    # run 'evidence' to get JSON with a base64-encoded quote
+    proc = subprocess.run(
+        [TDX_CLI, 'evidence', '--tdx', 'true'],
+        stdout=subprocess.PIPE,
+        check=True
+    )
+    ev = json.loads(proc.stdout)
+    # adjust the path below to where the quote actually lives in the JSON
+    b64_quote = ev['tdx_quote']  
+    return base64.b64decode(b64_quote)
 
 def verify_quote_and_get_key():
     quote = get_tdx_quote()
