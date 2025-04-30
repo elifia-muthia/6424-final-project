@@ -26,7 +26,7 @@ run-synth: .build-container .ensure-dirs
 # Run testbench with Icarus Verilog inside the container
 run-tb: .build-container .ensure-dirs
 	docker run --rm -v $(shell pwd)/$(workdir_DIR):/workspace/workdir \
-	           $(DOCKER_IMAGE) bash -c "cd /workspace/workdir/testbenches && iverilog *.v -o tb_run && ./tb_run"
+	           $(DOCKER_IMAGE) bash -c "cd /workspace/workdir/testbenches && iverilog *.v ../verilog/*.v -o tb_run && ./tb_run"
 
 
 # Clean up

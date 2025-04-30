@@ -1,5 +1,3 @@
-`include "../verilog/gate_level_top.v"
-
 `timescale 1ns/1ps
 `define HALF_CLOCK_PERIOD #5
 `define NUM_CYCLES_SIM 32'hFFFF
