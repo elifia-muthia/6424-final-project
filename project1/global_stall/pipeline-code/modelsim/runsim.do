@@ -6,8 +6,8 @@ vlib work
 vmap work work
 
 # include netlist and testbench files
-vlog +acc -incr ../workdir/testbenches/pipeline_tb.v
-vlog +acc -incr ../workdir/verilog/*.v
+vlog +acc -incr ../docker-yosys/workdir/testbenches/pipeline_tb.v
+vlog +acc -incr ../docker-yosys/workdir/verilog/*.v
 
 
 # run simulation 
