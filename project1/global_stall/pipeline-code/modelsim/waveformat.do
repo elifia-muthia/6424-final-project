@@ -1,6 +1,10 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /pipeline_tb/*
+add wave -noupdate /pipeline_tb/dut/*
+add wave -noupdate /pipeline_tb/dut/producer_inst/*
+add wave -noupdate /pipeline_tb/dut/pipeline_inst/*
+add wave -noupdate /pipeline_tb/dut/consumer_inst/*
 
 
 TreeUpdate [SetDefaultTree]
