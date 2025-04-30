@@ -11,6 +11,6 @@ vlog +acc -incr ../docker-yosys/workdir/verilog/*.v
 
 
 # run simulation 
-vsim +acc -t ps -lib work pipeline_t
+vsim +acc -t ps -lib work pipeline_tb
 do waveformat.do   
 run -all
