@@ -1,6 +1,8 @@
+`include "../verilog/gate_level_top.v"
+
 `timescale 1ns/1ps
-`define HALF_CLOCK_PERIOD = #5
-`define NUM_CYCLES_SIM = 32'hFFFF
+`define HALF_CLOCK_PERIOD #5
+`define NUM_CYCLES_SIM 32'hFFFF
 
 module pipeline_tb();
 
@@ -23,7 +25,7 @@ module pipeline_tb();
 
     //Run the clock
     always begin
-		`HALF_CLOCK_PERIOD;
+		`HALF_CLOCK_PERIOD
 		clk = ~clk;
 	end
 
@@ -38,7 +40,7 @@ module pipeline_tb();
         reset = 0;
 
         @(posedge clk);
-        for (i = 0; i < NUM_CYCLES_SIM; i = i + 1;) begin
+        for (i = 0; i < NUM_CYCLES_SIM; i = i + 1) begin
             $display("Cycle %d:\n\t Pipeline 1: \n\t\t Data: %d, Valid: %d \n\t Pipeline 2: \n\t\t Data: %d, Valid: %d", i, data_1, valid_1, data_2, valid_2);
             @(posedge clk);
         end

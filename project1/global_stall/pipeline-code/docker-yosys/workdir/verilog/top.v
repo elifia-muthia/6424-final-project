@@ -55,7 +55,7 @@ module top (
         .pipeline2_outputs  (pipeline2_outputs),
         .valid(out_valid),
         .out_data_1(out_data_1),
-        .out_data_2(out_data_2),
+        .out_data_2(out_data_2)
     );
 
 endmodule
