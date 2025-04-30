@@ -38,7 +38,7 @@ module pipeline_tb();
 
         @(posedge clk);
         for (i = 0; i < 65535; i = i + 1) begin
-            $display("Cycle %d:\n\t Pipeline 1: \n\t\t Data: %d, Valid: %d \n\t Pipeline 2: \n\t\t Data: %d, Valid: %d", i, data_1, valid_1, data_2, valid_2);
+            $display("Cycle %d: \n\t Pipeline 1: \n\t\t Data: %d, Valid: %d \n\t Pipeline 2: \n\t\t Data: %d, Valid: %d\n", i, data_1, valid_1, data_2, valid_2);
             @(posedge clk);
         end
 
