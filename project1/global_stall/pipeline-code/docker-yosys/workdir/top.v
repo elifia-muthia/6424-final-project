@@ -1,8 +1,12 @@
 module top (
     input wire clk,
     input wire reset,
-    output wire [31:0] out_data_1, out_data_2
+    output wire [31:0] out_data_1, out_data_2,
+    output wire out_valid_1, out_valid_2
 );
+
+    assign out_valid_1 = out_valid[0];
+    assign out_valid_2 = out_valid[1];
 
     // Wires connecting producer, pipeline, and consumer
     wire [31:0] pipeline1_inputs;
