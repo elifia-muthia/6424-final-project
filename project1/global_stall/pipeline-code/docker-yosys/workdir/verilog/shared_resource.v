@@ -6,7 +6,7 @@ module shared_resource (
     output wire [1:0]   out_valid,
     
     input  wire [31:0]       resource_input,
-    output wire [31:0]       resource_output,
+    output wire [31:0]       resource_output
 );
 
 reg [1:0] output_valid;

@@ -45,11 +45,11 @@ always @(posedge clk or posedge reset) begin
             valid[1] <= 1;
         end
 
-        if(counter_1[5:0] == 0) flush_1 <= 1;
-        else flush_1 <= 0;
+        if(counter_1[5:0] == 0) flush[0] <= 1;
+        else flush[0] <= 0;
 
-        if(counter_1[5:0] == 1) flush_2 <= 1;
-        else flush_2 <= 0;
+        if(counter_1[5:0] == 1) flush[1] <= 1;
+        else flush[1] <= 0;
     end
 end
 

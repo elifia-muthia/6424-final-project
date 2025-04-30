@@ -48,8 +48,6 @@ module pipeline_wrapped (
         .resource_output (resource_output)
     );
 
-    wire _out_valid_1, out_valid_2;
-
     // Instantiate pipeline 1
     pipeline_top pipeline_1 (
         .clk      (clk),

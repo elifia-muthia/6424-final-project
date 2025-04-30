@@ -5,9 +5,6 @@ module top (
     output wire out_valid_1, out_valid_2
 );
 
-    assign out_valid_1 = out_valid[0];
-    assign out_valid_2 = out_valid[1];
-
     // Wires connecting producer, pipeline, and consumer
     wire [31:0] pipeline1_inputs;
     wire [31:0] pipeline2_inputs;
@@ -19,6 +16,9 @@ module top (
     wire [1:0] out_valid;
     wire stall_1;
     wire stall_2;
+
+    assign out_valid_1 = out_valid[0];
+    assign out_valid_2 = out_valid[1];
 
     // Instantiate Producer
     producer_fsm producer_inst (
