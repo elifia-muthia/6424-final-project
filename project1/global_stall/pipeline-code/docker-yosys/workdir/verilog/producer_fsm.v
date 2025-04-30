@@ -22,6 +22,9 @@ assign {flush_2, flush_1} = flush;
 
 reg [31:0] counter_1, counter_2;
 
+assign pipeline1_inputs = counter_1;
+assign pipeline2_inputs = counter_2;
+
 always @(posedge clk or posedge reset) begin
     if(reset) begin
         valid <= 0;
