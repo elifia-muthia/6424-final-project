@@ -15,13 +15,10 @@ TDX_CLI = '/usr/bin/trustauthority-cli'
 
 def get_tdx_quote():
     # run 'evidence' to get JSON with a base64-encoded quote
-    proc = subprocess.run(
-		[TDX_CLI, 'evidence', '--tdx', '-c', '/ta_config.json'],
-		stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
-	)
-	if proc.returncode != 0:
-		logging.error(f"TA CLI failed ({proc.returncode}):\nSTDOUT: {proc.stdout}\nSTDERR: {proc.stderr}")
-		raise RuntimeError("Trust Authority evidence collection failed")
+    proc = subprocess.run([TDX_CLI, 'evidence', '--tdx', '-c', '/ta_config.json'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if proc.returncode != 0:
+        logging.error(f"TA CLI failed ({proc.returncode}):\nSTDOUT: {proc.stdout}\nSTDERR: {proc.stderr}")
+        raise RuntimeError("Trust Authority evidence collection failed")
     ev = json.loads(proc.stdout)
     # adjust the path below to where the quote actually lives in the JSON
     b64_quote = ev['tdx_quote']  
