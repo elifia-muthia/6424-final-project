@@ -13,26 +13,26 @@ all: run-synth run-tb
 
 # Create the Docker container
 .build-container:
-    docker build -t $(DOCKER_IMAGE) .
-    touch .build-container
-    cd workdir/libs && unzip asap7-std-cells-lib-merged.lib.zip
+	docker build -t $(DOCKER_IMAGE) .
+	touch .build-container
+	cd workdir/libs && unzip asap7-std-cells-lib-merged.lib.zip
 
 
 # Ensure the workdir directory exist
 .ensure-dirs:
-    @mkdir -p $(workdir_DIR)
+	@mkdir -p $(workdir_DIR)
 
 
 # Run synthesis with Yosys inside the container
 run-synth: .build-container .ensure-dirs
-    docker run --rm -v $(shell pwd)/$(workdir_DIR):/workspace/workdir \
-               $(DOCKER_IMAGE) bash -c "cd /workspace/workdir/verilog && yosys -c synth.tcl"
+	docker run --rm -v $(shell pwd)/$(workdir_DIR):/workspace/workdir \
+			$(DOCKER_IMAGE) bash -c "cd /workspace/workdir/verilog && yosys -c synth.tcl"
 
 
 # Run testbench with Icarus Verilog inside the container
 run-tb: .build-container .ensure-dirs
     docker run --rm -v $(shell pwd)/$(workdir_DIR):/workspace/workdir \
-               $(DOCKER_IMAGE) bash -c "cd /workspace/workdir/testbenches && iverilog *.v ../verilog/*.v -o tb_run && ./tb_run"
+            $(DOCKER_IMAGE) bash -c "cd /workspace/workdir/testbenches && iverilog *.v ../verilog/*.v -o tb_run && ./tb_run"
 
 
 
@@ -40,18 +40,32 @@ run-tb: .build-container .ensure-dirs
 # Clean up
 .PHONY: clean
 clean:
-    @rm -f .build-container
-    @echo "Cleaned up build files and directories."
+	@rm -f .build-container
+	@echo "Cleaned up build files and directories."
+
+.PHONY: clean_exe
+
+clean_exe:
+	@echo "Cleaning simulation and ModelSim files..."
+	find . -type f \( \
+		-name "modelsim.ini" -o \
+		-name "transcript" -o \
+		-name "waveformat.do" -o \
+		-name "_info" -o \
+		-name "*.vcd" -o \
+		-name "tb_run" \
+	\) -exec rm -f {} +
+	@echo "Clean complete."
 
 
 # Help target
 .PHONY: help
 help:
-    @echo "Available targets:"
-    @echo "  all            - Build the container and run synthesis and testbench."
-    @echo "  run-synth      - Run synthesis with Yosys inside the container."
-    @echo "  run-tb         - Run a testbench with Icarus Verilog inside the container."
-    @echo "  clean          - Clean up build files and directories."
+	@echo "Available targets:"
+	@echo "  all            - Build the container and run synthesis and testbench."
+	@echo "  run-synth      - Run synthesis with Yosys inside the container."
+	@echo "  run-tb         - Run a testbench with Icarus Verilog inside the container."
+	@echo "  clean          - Clean up build files and directories."
 
 
 MODULE ?= arbiter
@@ -66,6 +80,6 @@ MODULE ?= arbiter
 
 
 %.out:
-    cd ../../modelsim && vsim -c -do "set MODULE $*; do runsim.do"
+	cd ../../modelsim && vsim -c -do "set MODULE $*; do runsim.do"
 
 
