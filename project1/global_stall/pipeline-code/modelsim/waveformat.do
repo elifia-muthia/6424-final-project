@@ -1,20 +1,20 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /pipeline_tb/*
-add wave -noupdate /pipeline_tb/dut/*
-add wave -noupdate /pipeline_tb/dut/producer_inst/*
-add wave -noupdate /pipeline_tb/dut/pipeline_inst/*
-add wave -noupdate /pipeline_tb/dut/consumer_inst/*
-add wave -noupdate /pipeline_tb/dut/pipeline_inst/arbiter_inst/*
-add wave -noupdate /pipeline_tb/dut/pipeline_inst/shared_resource_inst/*
-add wave -noupdate /pipeline_tb/dut/pipeline_inst/pipeline_1/*
-add wave -noupdate /pipeline_tb/dut/pipeline_inst/pipeline_2/*
-add wave -noupdate /pipeline_tb/dut/pipeline_inst/pipeline_1/pipeline_unit_inst/*
-add wave -noupdate /pipeline_tb/dut/pipeline_inst/pipeline_1/buffer_slots_inst/*
-add wave -noupdate /pipeline_tb/dut/pipeline_inst/pipeline_1/stall_mgmt_inst/*
-add wave -noupdate /pipeline_tb/dut/pipeline_inst/pipeline_2/pipeline_unit_inst/*
-add wave -noupdate /pipeline_tb/dut/pipeline_inst/pipeline_2/buffer_slots_inst/*
-add wave -noupdate /pipeline_tb/dut/pipeline_inst/pipeline_2/stall_mgmt_inst/*
+add wave -noupdate /top_tb/*
+add wave -noupdate /top_tb/dut/*
+add wave -noupdate /top_tb/dut/producer_inst/*
+add wave -noupdate /top_tb/dut/pipeline_inst/*
+add wave -noupdate /top_tb/dut/consumer_inst/*
+add wave -noupdate /top_tb/dut/pipeline_inst/arbiter_inst/*
+add wave -noupdate /top_tb/dut/pipeline_inst/shared_resource_inst/*
+add wave -noupdate /top_tb/dut/pipeline_inst/pipeline_1/*
+add wave -noupdate /top_tb/dut/pipeline_inst/pipeline_2/*
+add wave -noupdate /top_tb/dut/pipeline_inst/pipeline_1/pipeline_unit_inst/*
+add wave -noupdate /top_tb/dut/pipeline_inst/pipeline_1/buffer_slots_inst/*
+add wave -noupdate /top_tb/dut/pipeline_inst/pipeline_1/stall_mgmt_inst/*
+add wave -noupdate /top_tb/dut/pipeline_inst/pipeline_2/pipeline_unit_inst/*
+add wave -noupdate /top_tb/dut/pipeline_inst/pipeline_2/buffer_slots_inst/*
+add wave -noupdate /top_tb/dut/pipeline_inst/pipeline_2/stall_mgmt_inst/*
 
 
 TreeUpdate [SetDefaultTree]
