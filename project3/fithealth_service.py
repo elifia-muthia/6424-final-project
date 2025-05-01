@@ -20,8 +20,8 @@ def get_tdx_quote():
 		stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
 	)
 	if proc.returncode != 0:
-        logging.error(f"TA CLI failed ({proc.returncode}):\nSTDOUT: {proc.stdout}\nSTDERR: {proc.stderr}")
-        raise RuntimeError("Trust Authority evidence collection failed")
+		logging.error(f"TA CLI failed ({proc.returncode}):\nSTDOUT: {proc.stdout}\nSTDERR: {proc.stderr}")
+		raise RuntimeError("Trust Authority evidence collection failed")
     ev = json.loads(proc.stdout)
     # adjust the path below to where the quote actually lives in the JSON
     b64_quote = ev['tdx_quote']  
