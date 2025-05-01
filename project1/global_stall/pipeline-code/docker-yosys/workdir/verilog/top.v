@@ -28,7 +28,9 @@ module top (
         .pipeline2_inputs  (pipeline2_inputs),
         .in_valid          (in_valid),
         .flush_1           (flush_1),
-        .flush_2           (flush_2)
+        .flush_2           (flush_2),
+        .stall_1(stall_1),
+        .stall_2(stall_2)
     );
 
     // Instantiate Pipeline with Arbiter and Shared Resource
