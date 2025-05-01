@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 `define HALF_CLOCK_PERIOD #100
 
-module pipeline_tb();
+module top_tb();
 
     reg clk = 0;
 	reg reset = 0;
