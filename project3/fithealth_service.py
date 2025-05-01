@@ -2,6 +2,7 @@ import os
 import sqlite3
 import subprocess
 import requests
+import base64, logging
 from flask import Flask, request, jsonify, abort
 
 # Configuration
