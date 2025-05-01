@@ -16,10 +16,9 @@ TDX_CLI = '/usr/bin/trustauthority-cli'
 def get_tdx_quote():
     # run 'evidence' to get JSON with a base64-encoded quote
     proc = subprocess.run(
-        [TDX_CLI, 'evidence', '--tdx', 'true'],
-        stdout=subprocess.PIPE,
-        check=True
-    )
+		[TDX_CLI, 'evidence', '--tdx', '-c', '/ta_config.json'],
+		stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True
+	)
     ev = json.loads(proc.stdout)
     # adjust the path below to where the quote actually lives in the JSON
     b64_quote = ev['tdx_quote']  

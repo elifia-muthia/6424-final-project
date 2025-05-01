@@ -9,6 +9,7 @@ CONTAINER_IMAGE="$(curl -s -H 'Metadata-Flavor: Google' \
   http://metadata.google.internal/computeMetadata/v1/instance/attributes/CONTAINER_IMAGE)"
 SECRET_NAME="$(curl -s -H 'Metadata-Flavor: Google' \
   http://metadata.google.internal/computeMetadata/v1/instance/attributes/SECRET_NAME)"
+TA_API_KEY=$(gcloud secrets versions access latest --secret="tdx-api-key")
 
 echo "Installing Docker..."
 apt-get update
@@ -43,6 +44,14 @@ gsutil cp gs://fithealthtdx-certs/server.crt /certs/server.crt
 gsutil cp gs://fithealthtdx-certs/server.key  /certs/server.key
 chmod 600 /certs/server.key
 
+cat > /ta_config.json <<EOF
+{
+  "trustauthority_url": "https://portal.trustauthority.intel.com",
+  "trustauthority_api_url": "https://api.trustauthority.intel.com",
+  "trustauthority_api_key":  "${TA_API_KEY}"
+}
+EOF
+
 echo "Pulling and running FitHealth container over HTTPS..."
 docker pull "${CONTAINER_IMAGE}"
 docker run -d \
@@ -52,6 +61,7 @@ docker run -d \
   -e GOOGLE_APPLICATION_CREDENTIALS="/etc/google/auth/application_default_credentials.json" \
   -v /mnt/data:/data \
   -v /certs:/certs:ro \
+  -v /ta_config.json:/ta_config.json:ro \
   -p 443:443 \
   "${CONTAINER_IMAGE}"
 
