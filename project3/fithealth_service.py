@@ -71,21 +71,45 @@ db_conn = get_db_connection(encryption_key)
 
 @app.route('/insert', methods=['POST'])
 def insert_record():
-    data = request.json or {}
-    user_id = data.get('user_id')
-    timestamp = data.get('timestamp')
-    heart_rate = data.get('heart_rate')
-    bp = data.get('blood_pressure')
-    notes = data.get('notes')
-    if not all([user_id, timestamp, heart_rate, bp]):
-        abort(400, 'Missing fields')
-    cur = db_conn.cursor()
-    cur.execute(
-        'INSERT OR REPLACE INTO records VALUES (?, ?, ?, ?, ?)',
-        (user_id, timestamp, heart_rate, bp, notes)
+    data = request.get_json(silent=True) or {}
+    required = ('user_id', 'timestamp', 'heart_rate', 'blood_pressure')
+    if not all(k in data for k in required):
+        abort(400, 'Missing required fields')
+
+    vals = (
+        data['user_id'],
+        data['timestamp'],
+        data['heart_rate'],
+        data['blood_pressure'],
+        data.get('notes')
     )
+
+    cur = db_conn.cursor()
+
+    cur.execute("""
+        INSERT INTO records(user_id, timestamp, heart_rate, blood_pressure, notes)
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT(user_id) DO UPDATE SET
+            timestamp       = excluded.timestamp,
+            heart_rate      = excluded.heart_rate,
+            blood_pressure  = excluded.blood_pressure,
+            notes           = excluded.notes
+        WHERE
+            timestamp      != excluded.timestamp OR
+            heart_rate     != excluded.heart_rate OR
+            blood_pressure != excluded.blood_pressure OR
+            notes IS NOT excluded.notes
+    """, vals)
+
+    if cur.rowcount == 1: # new row inserted
+        status = ('created', 201)
+    elif cur.rowcount == 2: # updated existing user on differing column
+        status = ('updated', 200)
+    else:  # 0 -> conflict
+        abort(409, 'Duplicate record: no change')
+
     db_conn.commit()
-    return jsonify({'status': 'ok'}), 201
+    return jsonify({'status': status[0]}), status[1]
 
 @app.route('/fetch/<user_id>', methods=['GET'])
 def fetch_record(user_id):
