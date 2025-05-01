@@ -46,7 +46,6 @@ chmod 600 /certs/server.key
 
 cat > /ta_config.json <<EOF
 {
-  "trustauthority_url": "https://portal.trustauthority.intel.com",
   "trustauthority_api_url": "https://api.trustauthority.intel.com",
   "trustauthority_api_key":  "${TA_API_KEY}"
 }
