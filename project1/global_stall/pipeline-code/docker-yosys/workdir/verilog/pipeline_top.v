@@ -17,7 +17,7 @@ module pipeline_top (
 
     wire [31:0] pipeline_unit_outputs;
     wire to_stall_mgmt_signal;
-    wire _in_valid, _out_valid;
+    wire _out_valid;
     wire [31:0] outputs_buffer;
 
     // Assign and manage valid signals
