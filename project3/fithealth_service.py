@@ -76,7 +76,7 @@ def init_db(conn, key_hex):
     conn.commit()
 
 def get_db_connection(key_hex):
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     init_db(conn, key_hex)
     return conn
 
