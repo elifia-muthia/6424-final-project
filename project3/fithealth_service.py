@@ -56,7 +56,7 @@ def verify_quote_and_get_key():
     verify_with_go_tdx_guest()
 
     encryption_key = subprocess.run(
-        ['gcloud','secrets','versions','access','latest','--secret=fithealth-db-key'],
+        ['gcloud','secrets','versions','access','latest','--secret='+SECRET_NAME],
         stdout=subprocess.PIPE, check=True
     ).stdout.strip().decode('utf-8')
 
