@@ -8,8 +8,6 @@ from flask import Flask, request, jsonify, abort
 
 # Configuration
 DB_PATH       = '/data/fithealth.db'
-SECRET_NAME   = os.environ.get('SECRET_NAME')
-GOOGLE_CREDENTIALS = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 
 app = Flask(__name__)
 
@@ -56,7 +54,7 @@ def verify_quote_and_get_key():
     verify_with_go_tdx_guest()
 
     encryption_key = subprocess.run(
-        ['gcloud','secrets','versions','access','latest','--secret='+SECRET_NAME],
+        ['gcloud','secrets','versions','access','latest','--secret=fithealth-sqlcipher-key'],
         stdout=subprocess.PIPE, check=True
     ).stdout.strip().decode('utf-8')
 
