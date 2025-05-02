@@ -14,8 +14,9 @@ echo "Installing Docker..."
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
   apt-transport-https ca-certificates linux-modules-extra-gcp curl gnupg lsb-release software-properties-common
+
 modprobe tdx_guest
-mount -t configfs configfs /sys/kernel/config
+mount -t configfs configfs /sys/kernel/config 2>/dev/null || true
 
 # Docker repo & install
 install -m0755 -d /etc/apt/keyrings
