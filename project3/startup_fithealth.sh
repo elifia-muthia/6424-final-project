@@ -46,13 +46,6 @@ gsutil cp gs://fithealthtdx-certs/server.crt /certs/server.crt
 gsutil cp gs://fithealthtdx-certs/server.key  /certs/server.key
 chmod 600 /certs/server.key
 
-cat > /ta_config.json <<EOF
-{
-  "trustauthority_api_url": "https://api.trustauthority.intel.com",
-  "trustauthority_api_key":  "${TA_API_KEY}"
-}
-EOF
-
 echo "Pulling and running FitHealth container over HTTPS..."
 docker pull "${CONTAINER_IMAGE}"
 docker run -d \
