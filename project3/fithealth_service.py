@@ -38,7 +38,7 @@ def get_tdx_quote():
 def verify_with_go_tdx_guest():
     # run 'check' on the dumped quote
     proc = subprocess.run(
-        ['check', '-in', QUOTE_PATH],
+        ['check', '-in', QUOTE_FILE],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True
