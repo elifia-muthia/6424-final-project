@@ -52,6 +52,8 @@ docker run -d \
   --name fithealth \
   --mount type=bind,source=/sys/kernel/config,target=/sys/kernel/config \
   --cap-add SYS_ADMIN \
+  --cap-add MKNOD \
+  --security-opt seccomp=unconfined \
   -e SECRET_NAME="${SECRET_NAME}" \
   -e GOOGLE_APPLICATION_CREDENTIALS="/etc/google/auth/application_default_credentials.json" \
   -v /mnt/data:/data \
