@@ -50,7 +50,6 @@ echo "Pulling and running FitHealth container over HTTPS..."
 docker pull "${CONTAINER_IMAGE}"
 docker run -d \
   --name fithealth \
-  --device /dev/tdx-guest:/dev/tdx-guest \
   --mount type=bind,source=/sys/kernel/config,target=/sys/kernel/config \
   --cap-add SYS_ADMIN \
   -e SECRET_NAME="${SECRET_NAME}" \
