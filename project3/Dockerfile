@@ -1,4 +1,8 @@
-# Use an Ubuntu base image
+FROM golang:1.21-bullseye AS tdx_builder
+
+# Install the go-tdx-guest 'check' tool at a known good version
+RUN go install github.com/google/go-tdx-guest/tools/check@v0.3.1
+
 FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -13,16 +17,14 @@ RUN echo "Acquire::http::Pipeline-Depth 0;" > /etc/apt/apt.conf.d/99custom \
     build-essential libsqlcipher-dev sqlite3 \
     apt-transport-https ca-certificates curl gnupg lsb-release \
     gcc dirmngr \
-    golang-go git \
     linux-modules-extra-gcp \
  && rm -rf /var/lib/apt/lists/* \
  && apt-get clean
 
-RUN GOPATH=/go \
-  GOBIN=/usr/local/bin \
-  go install github.com/google/go-tdx-guest/tools/check@latest
-  
-RUN which check
+COPY --from=tdx_builder /go/bin/check /usr/local/bin/check
+
+# (Optional) verify it landed correctly
+RUN /usr/local/bin/check --help
 
 # 2. Create Python venv
 RUN python3.11 -m venv /opt/venv
