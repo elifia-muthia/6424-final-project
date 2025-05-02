@@ -12,38 +12,54 @@ GOOGLE_CREDENTIALS = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 
 app = Flask(__name__)
 
-TDX_CLI = '/usr/bin/trustauthority-cli'
+TSM_PATH = '/sys/kernel/config/tsm/report/report0'
+QUOTE_FILE = '/data/quote.bin'
+NONCE_SIZE = 64
 
 def get_tdx_quote():
-    # run 'evidence' to get JSON with a base64-encoded quote
-    proc = subprocess.run([TDX_CLI, 'evidence', '--tdx', '-c', '/ta_config.json'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    # 1. Prepare the report directory
+    os.makedirs(TSM_PATH, exist_ok=True)
+
+    # 2. Generate a random nonce
+    nonce = secrets.token_bytes(NONCE_SIZE)
+    with open(f'{TSM_PATH}/inblob', 'wb') as f:
+        f.write(nonce)
+
+    # 3. Read the raw quote
+    quote = open(f'{TSM_PATH}/outblob', 'rb').read()
+
+    # (Optionally) persist it for debugging
+    with open(QUOTE_FILE, 'wb') as f:
+        f.write(quote)
+
+    return quote, nonce
+
+def verify_with_go_tdx_guest():
+    # run 'check' on the dumped quote
+    proc = subprocess.run(
+        ['check', '-in', QUOTE_PATH],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
     if proc.returncode != 0:
-        logging.error(f"TA CLI failed ({proc.returncode}):\nSTDOUT: {proc.stdout}\nSTDERR: {proc.stderr}")
-        raise RuntimeError("Trust Authority evidence collection failed")
-    ev = json.loads(proc.stdout)
-    # adjust the path below to where the quote actually lives in the JSON
-    b64_quote = ev['tdx_quote']  
-    return base64.b64decode(b64_quote)
+        raise RuntimeError(
+            f"TDX quote verification failed:\n{proc.stderr.strip()}"
+        )
+    # else it's a zero-exit "Success"
 
 def verify_quote_and_get_key():
-    quote = get_tdx_quote()
-    # Submit quote to Intel attestation service
-    resp = requests.post(
-        'https://api.trust-attestation.intel.com/v1/verify',
-        files={'quote': quote}
-    )
-    if resp.status_code != 200 or not resp.json().get('is_trusted'):
-        abort(500, 'TDX attestation failed')
-    # Fetch SQLCipher key from Secret Manager
-    cmd = [
-        'gcloud', 'secrets', 'versions', 'access', 'latest',
-        f'--secret={SECRET_NAME}',
-        '--format=value(payload.data:UNBUFFERED)'
-    ]
-    result = subprocess.run(cmd, capture_output=True, check=True)
-    key_hex = result.stdout.strip().decode('utf-8')
-    # Assuming you stored the 32-byte key as hex
-    return key_hex
+    # collect the local quote
+    quote, nonce = get_tdx_quote()
+
+	verify_with_go_tdx_guest()
+	
+    encryption_key = subprocess.run(
+        ['gcloud','secrets','versions','access','latest','--secret=fithealth-db-key'],
+        stdout=subprocess.PIPE, check=True
+    ).stdout.strip().decode('utf-8')
+
+    return encryption_key
 
 def init_db(conn, key_hex):
     # Use SQLCipher hex key format

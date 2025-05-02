@@ -9,12 +9,13 @@ CONTAINER_IMAGE="$(curl -s -H 'Metadata-Flavor: Google' \
   http://metadata.google.internal/computeMetadata/v1/instance/attributes/CONTAINER_IMAGE)"
 SECRET_NAME="$(curl -s -H 'Metadata-Flavor: Google' \
   http://metadata.google.internal/computeMetadata/v1/instance/attributes/SECRET_NAME)"
-TA_API_KEY=$(gcloud secrets versions access latest --secret="tdx-api-key")
 
 echo "Installing Docker..."
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
-  apt-transport-https ca-certificates curl gnupg lsb-release software-properties-common
+  apt-transport-https ca-certificates linux-modules-extra-gcp curl gnupg lsb-release software-properties-common
+modprobe tdx_guest
+mount -t configfs configfs /sys/kernel/config
 
 # Docker repo & install
 install -m0755 -d /etc/apt/keyrings
@@ -55,12 +56,13 @@ echo "Pulling and running FitHealth container over HTTPS..."
 docker pull "${CONTAINER_IMAGE}"
 docker run -d \
   --name fithealth \
-  --device=/dev/tdx_guest \
+  --device /dev/tdx-guest:/dev/tdx-guest \
+  --mount type=bind,source=/sys/kernel/config,target=/sys/kernel/config \
+  --cap-add SYS_ADMIN \
   -e SECRET_NAME="${SECRET_NAME}" \
   -e GOOGLE_APPLICATION_CREDENTIALS="/etc/google/auth/application_default_credentials.json" \
   -v /mnt/data:/data \
   -v /certs:/certs:ro \
-  -v /ta_config.json:/ta_config.json:ro \
   -p 443:443 \
   "${CONTAINER_IMAGE}"
 

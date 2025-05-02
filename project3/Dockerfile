@@ -13,8 +13,16 @@ RUN echo "Acquire::http::Pipeline-Depth 0;" > /etc/apt/apt.conf.d/99custom \
     build-essential libsqlcipher-dev sqlite3 \
     apt-transport-https ca-certificates curl gnupg lsb-release \
     gcc dirmngr \
+    golang-go git \
+    linux-modules-extra-gcp \
  && rm -rf /var/lib/apt/lists/* \
  && apt-get clean
+
+RUN GOPATH=/go \
+  GOBIN=/usr/local/bin \
+  go install github.com/google/go-tdx-guest/tools/check@latest
+  
+RUN which check
 
 # 2. Create Python venv
 RUN python3.11 -m venv /opt/venv
