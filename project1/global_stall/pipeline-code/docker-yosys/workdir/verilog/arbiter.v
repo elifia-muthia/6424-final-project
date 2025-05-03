@@ -5,7 +5,7 @@ module arbiter (
     input  wire req_2,
     
     output wire grant_1,
-    output wire grant_2,
+    output wire grant_2
 );
 
     
