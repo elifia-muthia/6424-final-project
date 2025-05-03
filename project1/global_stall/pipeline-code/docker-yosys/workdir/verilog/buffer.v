@@ -8,7 +8,8 @@ module buffer_slots (
 
     output wire        out_valid, //added
     output wire [31:0] outputs,
-    output wire        to_stall_mgmt  //Buffer full
+    output wire        to_stall_mgmt,  //Buffer full
+    output wure buffer_empty
 );
     // Stall and Regular Slots 
     reg [31:0] buffer_slots [7:0];
@@ -18,6 +19,7 @@ module buffer_slots (
     integer i;
 
     assign to_stall_mgmt = (slots_filled === 8) ? 1'b1 : 1'b0;
+    assign buffer_empty = (slots_filled === 0) ? 1'b1 : 1'b0;
     assign outputs = data_out;
     assign out_valid = output_valid;
 
