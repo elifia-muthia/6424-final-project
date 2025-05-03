@@ -39,7 +39,7 @@ module pipeline_wrapped (
         .req_1    (arbiter_req_1),
         .req_2    (arbiter_req_2),
         .grant_1  (arbiter_grant_1),
-        .grant_2  (arbiter_grant_2),
+        .grant_2  (arbiter_grant_2)
     );
 
     // Instantiate shared resource
