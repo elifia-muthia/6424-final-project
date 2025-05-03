@@ -21,8 +21,14 @@ module pipeline_top (
     wire buffer_empty;
     wire out_flush;
     wire [31:0] outputs_buffer;
+    reg prev_pipeline_output_valid;
 
     // Assign and manage valid signals
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) prev_pipeline_output_valid <= 0;
+        else prev_pipeline_output_valid <= _out_valid;
+    end
 
     pipeline_unit pipeline_unit_inst (
         .clk      (clk),
@@ -66,7 +72,7 @@ module pipeline_top (
     */
 
     // Placeholder signals to demonstrate arbiter interaction
-    assign arbiter_req    = _out_valid | !buffer_empty;
+    assign arbiter_req    = prev_pipeline_output_valid | !buffer_empty;
     assign resource_input = outputs_buffer;
     
     // Use resource_output as necessary within the pipeline logic
