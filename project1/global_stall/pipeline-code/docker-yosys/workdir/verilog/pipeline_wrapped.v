@@ -20,8 +20,8 @@ module pipeline_wrapped (
     wire arbiter_grant_2;
     wire _out_valid_1;
     wire _out_valid_2;
-    wire shared_resource_valid_1;
-    wire shared_resource_valid_2;
+    wire [1:0] shared_resource_valid_1;
+    wire [1:0] shared_resource_valid_2;
 
     // Signals for pipelines to communicate with shared resource
     wire [31:0] resource_input_1;
