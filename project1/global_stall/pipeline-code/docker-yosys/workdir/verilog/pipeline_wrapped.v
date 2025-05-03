@@ -20,12 +20,16 @@ module pipeline_wrapped (
     wire arbiter_grant_2;
     wire _out_valid_1;
     wire _out_valid_2;
-
+    wire shared_resource_valid_1;
+    wire shared_resource_valid_2;
 
     // Signals for pipelines to communicate with shared resource
     wire [31:0] resource_input_1;
     wire [31:0] resource_input_2;
     wire [31:0] resource_output;
+
+    assign shared_resource_valid_1 = {1'b0, _out_valid_1};
+    assign shared_resource_valid_2 = {_out_valid_2, 1'b0};
 
 
     // Instantiate arbiter
@@ -43,7 +47,7 @@ module pipeline_wrapped (
         .clk             (clk),
         .reset           (reset),
         .resource_input  (arbiter_grant_1 ? resource_input_1 : resource_input_2),
-        .in_valid        ({_out_valid_2, _out_valid_1}),
+        .in_valid        (arbiter_grant_1 ? shared_resource_valid_1 : shared_resource_valid_2),
         .out_valid       (out_valid),
         .resource_output (resource_output)
     );
