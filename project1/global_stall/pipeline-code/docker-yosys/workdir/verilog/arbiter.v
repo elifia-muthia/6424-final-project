@@ -9,6 +9,7 @@ module arbiter (
 );
     reg grant_1_reg, grant_2_reg;
     reg last_grant;  // 0 (last gave to 1) or 1 (last gave to 2)
+    reg cycle;
 
     assign grant_1 = grant_1_reg;
     assign grant_2 = grant_2_reg;
@@ -18,30 +19,34 @@ module arbiter (
             grant_1_reg   <= 0;
             grant_2_reg   <= 0;
             last_grant <= 1;
+            cycle <= 0;
         end else begin
-            if (req_1 && req_2) begin
-                // take turns
-                if (last_grant) begin
+            if (cycle == 0) begin
+                if (req_1 && req_2) begin
+                    // take turns
+                    if (last_grant) begin
+                        grant_1_reg    <= 1;
+                        grant_2_reg    <= 0;
+                        last_grant <= 0;
+                    end else begin
+                        grant_1_reg    <= 0;
+                        grant_2_reg    <= 1;
+                        last_grant <= 1;
+                    end
+                end else if (req_1) begin
                     grant_1_reg    <= 1;
                     grant_2_reg    <= 0;
                     last_grant <= 0;
-                end else begin
+                end else if (req_2) begin
                     grant_1_reg    <= 0;
                     grant_2_reg    <= 1;
                     last_grant <= 1;
+                end else begin
+                    grant_1_reg <= 0;
+                    grant_2_reg <= 0;
                 end
-            end else if (req_1) begin
-                grant_1_reg    <= 1;
-                grant_2_reg    <= 0;
-                last_grant <= 0;
-            end else if (req_2) begin
-                grant_1_reg    <= 0;
-                grant_2_reg    <= 1;
-                last_grant <= 1;
-            end else begin
-                grant_1_reg <= 0;
-                grant_2_reg <= 0;
             end
+        cycle <= ~cycle;
         end
     end
 endmodule
