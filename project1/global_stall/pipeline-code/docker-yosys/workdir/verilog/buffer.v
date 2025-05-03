@@ -9,7 +9,7 @@ module buffer_slots (
     output wire        out_valid, //added
     output wire [31:0] outputs,
     output wire        to_stall_mgmt,  //Buffer full
-    output wure buffer_empty
+    output wire buffer_empty
 );
     // Stall and Regular Slots 
     reg [31:0] buffer_slots [7:0];
