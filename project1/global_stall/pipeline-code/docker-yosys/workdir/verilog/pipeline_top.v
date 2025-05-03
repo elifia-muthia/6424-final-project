@@ -62,7 +62,7 @@ module pipeline_top (
     */
 
     // Placeholder signals to demonstrate arbiter interaction
-    assign arbiter_req    = _out_valid;
+    assign arbiter_req    = _out_valid | out_valid;
     assign resource_input = outputs_buffer;
     
     // Use resource_output as necessary within the pipeline logic
