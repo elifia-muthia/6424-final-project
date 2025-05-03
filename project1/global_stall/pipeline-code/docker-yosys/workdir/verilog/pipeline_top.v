@@ -19,6 +19,7 @@ module pipeline_top (
     wire to_stall_mgmt_signal;
     wire _out_valid;
     wire buffer_empty;
+    wire out_flush;
     wire [31:0] outputs_buffer;
 
     // Assign and manage valid signals
@@ -31,7 +32,8 @@ module pipeline_top (
         .flush    (flush),
         .stall    (stall_signal),
         .outputs  (pipeline_unit_outputs),
-        .out_valid(_out_valid)
+        .out_valid(_out_valid),
+        .out_flush(out_flush)
     );
 
     buffer_slots buffer_slots_inst (
@@ -42,7 +44,7 @@ module pipeline_top (
         .stall         (~arbiter_grant),
         .outputs       (outputs_buffer),
         .to_stall_mgmt (to_stall_mgmt_signal),
-        .flush         (flush),
+        .flush         (out_flush),
         .out_valid     (out_valid),
         .buffer_empty (buffer_empty)
     );
