@@ -17,7 +17,7 @@ module arbiter (
         if (reset) begin
             grant_1_reg   <= 0;
             grant_2_reg   <= 0;
-            last_grant <= 0;
+            last_grant <= 1;
         end else begin
             if (req_1 && req_2) begin
                 // take turns
