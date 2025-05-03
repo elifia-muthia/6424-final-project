@@ -18,8 +18,8 @@ module buffer_slots (
     integer i;
 
     assign to_stall_mgmt = (slots_filled === 8) ? 1'b1 : 1'b0;
-    assign outputs = output_value;
-    assign out_valid = data_out;
+    assign outputs = data_out;
+    assign out_valid = output_valid;
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin
