@@ -39,8 +39,8 @@ always @(posedge clk or posedge reset) begin
             stage_1_valid <= 0;
             stage_1_output <= 0;
         end else if (stall) begin
-            stage_1_valid <= 0;
             stage_1_output <= stage_1_output;
+            stage_1_valid <= stage_1_valid;
         end else begin
             stage_1_valid <= in_valid;
             stage_1_output <= inputs;
@@ -48,10 +48,9 @@ always @(posedge clk or posedge reset) begin
 
         // stage 2 
         if (stage_2_flush) begin
-            stage_2_valid <= 0;
             stage_2_output <= 0;
         end else if (stall) begin
-            stage_2_valid <= 0;
+            stage_2_valid <= stage_2_valid;
             stage_2_output <= stage_2_output;
         end else begin
             stage_2_valid <= stage_1_valid;
@@ -63,7 +62,7 @@ always @(posedge clk or posedge reset) begin
             stage_3_valid <= 0;
             stage_3_output <= 0;
         end else if (stall) begin
-            stage_3_valid <= 0;
+            stage_3_valid <= stage_3_valid;
             stage_3_output <= stage_3_output;
         end else begin
             stage_3_valid <= stage_2_valid;
