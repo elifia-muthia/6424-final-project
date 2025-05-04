@@ -1,7 +1,7 @@
 module stall_mgmt (
     input  wire clk,
     input  wire reset,
-    input  wire stall_input,
+    input  wire arbiter_grant,
     input  wire to_stall_mgmt, //from buffer
     output wire stall_output
 );
@@ -13,6 +13,6 @@ module stall_mgmt (
         if (reset)
             stall <= 0; // no stall
         else
-            stall <= stall_input & to_stall_mgmt; // start stalling if buffer is still full
+            stall <= ~arbiter_grant & to_stall_mgmt; // start stalling if buffer is still full and we were not granted arbiter access
     end
 endmodule

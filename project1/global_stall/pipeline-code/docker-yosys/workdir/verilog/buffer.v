@@ -2,7 +2,7 @@ module buffer_slots (
     input  wire        clk,
     input  wire        reset,
     input  wire [31:0] inputs,
-    input  wire        stall,
+    input  wire        arbiter_grant,
     input  wire        flush,
     input  wire        in_valid, //added
 
@@ -44,7 +44,7 @@ module buffer_slots (
                 output_valid <= 0;
                 data_out <= 0;
                 request <= 0;
-            end else if (stall) begin 
+            end else if (~arbiter_grant) begin 
                 if ((slots_filled < 8) && in_valid) begin
                     buffer_slots[slots_filled] <= inputs;
                     slots_filled <= slots_filled + 1;

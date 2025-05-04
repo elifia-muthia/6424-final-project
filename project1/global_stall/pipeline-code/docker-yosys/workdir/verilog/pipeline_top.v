@@ -40,7 +40,7 @@ module pipeline_top (
         .reset         (reset),
         .inputs        (pipeline_unit_outputs),
         .in_valid      (_out_valid),
-        .stall         (~arbiter_grant),
+        .arbiter_grant (arbiter_grant),
         .outputs       (resource_input),
         .to_stall_mgmt (to_stall_mgmt_signal),
         .flush         (out_flush),
@@ -52,7 +52,7 @@ module pipeline_top (
     stall_mgmt stall_mgmt_inst (
         .clk           (clk),
         .reset         (reset),
-        .stall_input   (~arbiter_grant),
+        .arbiter_grant   (arbiter_grant),
         .to_stall_mgmt (to_stall_mgmt_signal),
         .stall_output  (stall_signal)
     );
