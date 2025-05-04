@@ -25,7 +25,7 @@ module pipeline_top (
     wire in_valid_2, in_valid_3;
     wire in_stall_1, in_stall_2;
 
-    
+    assign arbiter_req <= 1;
 
     pipeline_unit pipeline_stage_1 (
         .clk(clk),
@@ -59,7 +59,7 @@ module pipeline_top (
         .in_flush(in_flush_3),
         .inputs(inputs_3),
         .in_valid(in_valid_3),
-        .in_stall(~arbiter_req),
+        .in_stall(~arbiter_grant),
         .outputs(resource_input), 
         .out_valid(out_valid_to_resource),
         .out_flush(),
