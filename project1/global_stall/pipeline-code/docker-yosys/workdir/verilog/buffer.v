@@ -49,9 +49,13 @@ module buffer_slots (
                     buffer_slots[slots_filled] <= inputs;
                     slots_filled <= slots_filled + 1;
                 end
-                output_valid <= 0;
-                if ((slots_filled == 0) && (!in_valid)) request <= 0;
-                else  request <= 1;
+                if ((slots_filled == 0) && (!in_valid)) begin
+                    request <= 0;
+                    output_valid <= 0;
+                end else  begin
+                    request <= 1;
+                    output_valid <= 1;
+                end
             end else if (slots_filled > 0) begin
                 data_out <= buffer_slots[0];
                 for (i = 0; i < 7; i = i + 1) begin
