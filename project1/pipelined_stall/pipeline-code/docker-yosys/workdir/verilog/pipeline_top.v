@@ -87,7 +87,7 @@ module pipeline_top (
         .outputs(out_data_to_consumer), 
         .out_valid(out_valid_to_resource),
         .out_flush(),
-        .out_stall(in_stall_from_consumer)
+        .out_stall(out_stall_to_resource)
     );
  
 
