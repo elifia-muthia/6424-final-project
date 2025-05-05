@@ -16,13 +16,9 @@ module top (
     wire flush_2;
     wire in_valid_1;
     wire in_valid_2;
-    wire out_valid_1;
-    wire out_valid_2;
     wire stall_1;
     wire stall_2;
 
-    assign out_valid_1 = out_valid_1;
-    assign out_valid_2 = out_valid_2;
 
     // Instantiate Producer
     producer_fsm producer_inst (
