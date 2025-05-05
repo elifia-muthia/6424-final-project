@@ -5,12 +5,14 @@ module pipeline_wrapped (
     input  wire        reset,
     input  wire [31:0] pipeline1_inputs,
     input  wire [31:0] pipeline2_inputs,
-    input  wire [1:0]  in_valid,
+    input  wire        in_valid_1,
+    input  wire        in_valid_2,
     input  wire        flush_1,
     input  wire        flush_2,
     output wire [31:0] pipeline1_outputs,
     output wire [31:0] pipeline2_outputs,
-    output wire [1:0]  out_valid,
+    output wire        out_valid_1,
+    output wire        out_valid_2,
     output wire        stall_1,
     output wire        stall_2
 );
@@ -22,17 +24,13 @@ module pipeline_wrapped (
     wire arbiter_grant_2;
     wire _out_valid_1;
     wire _out_valid_2;
-    wire [1:0] shared_resource_valid_1;
-    wire [1:0] shared_resource_valid_2;
+    wire shared_resource_out_valid_1;
+    wire shared_resource_out_valid_2;
 
     // Signals for pipelines to communicate with shared resource
     wire [31:0] resource_input_1;
     wire [31:0] resource_input_2;
     wire [31:0] resource_output;
-
-    assign shared_resource_valid_1 = {1'b0, _out_valid_1};
-    assign shared_resource_valid_2 = {_out_valid_2, 1'b0};
-
 
     // Instantiate arbiter
     arbiter arbiter_inst (
@@ -49,8 +47,10 @@ module pipeline_wrapped (
         .clk             (clk),
         .reset           (reset),
         .resource_input  (arbiter_grant_1 ? resource_input_1 : resource_input_2),
-        .in_valid        (arbiter_grant_1 ? shared_resource_valid_1 : shared_resource_valid_2),
-        .out_valid       (out_valid),
+        .in_valid_1      (arbiter_grant_1 ? shared_resource_valid_1 : 0),
+        .in_valid_2      (arbiter_grant_2 ? shared_resource_valid_2 : 0),
+        .out_valid_1     (shared_resource_out_valid_1),
+        .out_valid_2     (shared_resource_out_valid_2),
         .resource_output (resource_output)
     );
 
@@ -59,17 +59,17 @@ module pipeline_wrapped (
         .clk(clk),
         .reset(reset),
         .inputs(pipeline1_inputs),
-        .in_valid(in_valid[0]),
+        .in_valid(in_valid_1),
         .in_flush(flush_1),
         .arbiter_grant(arbiter_grant_1),
         .resource_output(resource_input_1),
-        .in_valid_from_resource(out_valid[0]),
+        .in_valid_from_resource(shared_resource_out_valid_1),
         .pipeline_output(pipeline1_outputs),
         .out_valid_to_resource(_out_valid_1),
         .arbiter_req(arbiter_req_1),
         .resource_input(resource_input_1),
         .out_stall(stall_1),
-        .out_valid_to_consumer(out_valid[0])        
+        .out_valid_to_consumer(out_valid_1)        
     );
 
     // Instantiate pipeline 2
@@ -77,17 +77,17 @@ module pipeline_wrapped (
         .clk(clk),
         .reset(reset),
         .inputs(pipeline2_inputs),
-        .in_valid(in_valid[1]),
+        .in_valid(in_valid_2),
         .in_flush(flush_2),
         .arbiter_grant(arbiter_grant_2),
         .resource_output(resource_input_2),
-        .in_valid_from_resource(out_valid[1]),
+        .in_valid_from_resource(shared_resource_out_valid_2),
         .pipeline_output(pipeline2_outputs),
         .out_valid_to_resource(_out_valid_2),
         .arbiter_req(arbiter_req_2),
         .resource_input(resource_input_2),
         .out_stall(stall_2),
-        .out_valid_to_consumer(out_valid[1])        
+        .out_valid_to_consumer(out_valid_2)        
     );
 
 endmodule
