@@ -7,6 +7,6 @@ module shared_resource (
     output wire [31:0]       resource_output
 );
 
-        assign resource_output <= 2 * resource_input;
+        assign resource_output = 2 * resource_input;
 
 endmodule
