@@ -1,3 +1,5 @@
+//Modified for pipeline stall
+
 module consumer_fsm (
     input  wire        clk,
     input  wire        reset,

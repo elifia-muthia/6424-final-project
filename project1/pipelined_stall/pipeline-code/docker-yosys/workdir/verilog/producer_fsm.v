@@ -1,4 +1,5 @@
-// Placeholder for producer FSM
+//Modified for pipeline stall
+
 module producer_fsm (
     input  wire        clk,
     input  wire        reset,

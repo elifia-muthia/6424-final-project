@@ -1,3 +1,5 @@
+//Modified for pipeline stall
+
 module top (
     input wire clk,
     input wire reset,
@@ -29,8 +31,8 @@ module top (
         .in_valid          (in_valid),
         .flush_1           (flush_1),
         .flush_2           (flush_2),
-        .stall_1(stall_1),
-        .stall_2(stall_2)
+        .stall_1           (stall_1),
+        .stall_2           (stall_2)
     );
 
     // Instantiate Pipeline with Arbiter and Shared Resource
@@ -45,8 +47,8 @@ module top (
         .pipeline1_outputs  (pipeline1_outputs),
         .pipeline2_outputs  (pipeline2_outputs),
         .out_valid          (out_valid),
-        .stall_1(stall_1),
-        .stall_2(stall_2)
+        .stall_1            (stall_1),
+        .stall_2            (stall_2)
     );
 
     // Instantiate Consumer
@@ -55,9 +57,9 @@ module top (
         .reset              (reset),
         .pipeline1_outputs  (pipeline1_outputs),
         .pipeline2_outputs  (pipeline2_outputs),
-        .valid(out_valid),
-        .out_data_1(out_data_1),
-        .out_data_2(out_data_2)
+        .valid              (out_valid),
+        .out_data_1         (out_data_1),
+        .out_data_2         (out_data_2)
     );
 
 endmodule
