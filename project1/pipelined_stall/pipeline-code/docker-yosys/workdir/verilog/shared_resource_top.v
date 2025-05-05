@@ -72,6 +72,12 @@ module shared_resource_top (
 
     assign arbiter_req_1 = !buffer_empty_1 | in_valid_1;
     assign arbiter_req_2 = !buffer_empty_2 | in_valid_2;
+
+    assign out_flush_1 = flush_o_1;
+    assign out_flush_2 = flush_o_2;
+
+    assign out_valid_1 = valid_o_1;
+    assign out_valid_2 = valid_o_2;
    
     always @(posedge clk or posedge reset) begin
         if (reset) begin
