@@ -64,7 +64,7 @@ always @(posedge clk or posedge reset) begin
         if (in_flush) begin
             flush_o <= 1;
             valid_o <= 0;
-            pipeline_data_out <= 0;c
+            pipeline_data_out <= 0;
         end else begin
             flush_o <= 0;
             valid_o <= in_stall & valid_o;

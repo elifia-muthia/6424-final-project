@@ -34,7 +34,6 @@ module buffer_slots (
                     buffer_slots[i] <= 0;
                 end
                 slots_filled <= 0;
-                data_out <= 0;
             end else if (enq && !buffer_full) begin
                 buffer_slots[slots_filled] <= inputs;
                 slots_filled <= slots_filled + 1;
