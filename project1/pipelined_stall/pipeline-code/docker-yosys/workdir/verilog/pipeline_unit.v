@@ -67,7 +67,7 @@ always @(posedge clk or posedge reset) begin
             pipeline_data_out <= 0;
         end else begin
             flush_o <= 0;
-            valid_o <= in_stall & valid_o;
+            valid_o <= (in_stall & valid_o) ? 1 : fire;
             if (fire) pipeline_data_out <= pipeline_data_in;
         end
     end
