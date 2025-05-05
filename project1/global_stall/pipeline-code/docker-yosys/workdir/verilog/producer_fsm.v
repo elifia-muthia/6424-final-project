@@ -48,10 +48,10 @@ always @(posedge clk or posedge reset) begin
             valid[1] <= 1;
         end
 
-        if(counter_1[7:0] == 0) flush[0] <= 1;
+        if(counter_1[6:0] == 0) flush[0] <= 1;
         else flush[0] <= 0;
 
-        if(counter_2[7:0] == 1) flush[1] <= 1;
+        if(counter_2[6:0] == 1) flush[1] <= 1;
         else flush[1] <= 0;
     end
 end

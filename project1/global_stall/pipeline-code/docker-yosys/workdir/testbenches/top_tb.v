@@ -37,7 +37,7 @@ module top_tb();
         reset = 0;
 
         @(posedge clk);
-        for (i = 0; i < 8192; i = i + 1) begin
+        for (i = 0; i < 256; i = i + 1) begin
             $display("Cycle %d: \t Pipeline 1: Data: %d, Valid: %d. \t Pipeline 2: Data: %d, Valid: %d \n", i, data_1, valid_1, data_2, valid_2);
             @(posedge clk);
         end
