@@ -49,7 +49,7 @@ module shared_resource_top (
     reg [31:0] resource_data_out_2;
 
     wire [31:0] resource_data_in;
-    reg [31:0] resource_data_out;
+    wire [31:0] resource_data_out;
 
     assign fire_1 = (in_valid_1 | !buffer_empty_1) & !(in_stall_1 & valid_o_1) & arbiter_grant_1;
     assign out_stall_1 = buffer_full_1;
