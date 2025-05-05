@@ -17,7 +17,7 @@ module producer_fsm (
 reg flush_1, flush_2, valid_1, valid_2;
 
 assign out_valid_1 = valid_1;
-assign out_valid_1 = valid_2;
+assign out_valid_2 = valid_2;
 assign out_flush_1 = flush_1;
 assign out_flush_2 = flush_2;
 
