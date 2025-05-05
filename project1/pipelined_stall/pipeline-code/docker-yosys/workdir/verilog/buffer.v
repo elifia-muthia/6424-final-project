@@ -16,6 +16,7 @@ module buffer_slots (
     // Stall and Regular Slots 
     reg [31:0] buffer_slots [1:0];
     integer slots_filled;
+    integer i;
 
     assign buffer_full = (slots_filled === 2) ? 1'b1 : 1'b0;
     assign buffer_empty = (slots_filled === 0) ? 1'b1 : 1'b0;

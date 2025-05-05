@@ -23,7 +23,7 @@ reg flush_o;
 wire enq;
 wire deq;
 reg [31:0] pipeline_data_out;
-reg [31:0] buffer_data_out;
+wire [31:0] buffer_data_out;
 wire [31:0] pipeline_data_in;
 wire buffer_empty;
 wire buffer_full;
@@ -60,15 +60,13 @@ always @(posedge clk or posedge reset) begin
     valid_o <= 0;
     flush_o <= 0;
     pipeline_data_out <= 0;
-    buffer_data_out <= 0;
     end else begin
         if (in_flush) begin
-            flush_o <= 1
-            valid_o = 0;
-            pipeline_data_out <= 0;
-            buffer_data_out <= 0;
+            flush_o <= 1;
+            valid_o <= 0;
+            pipeline_data_out <= 0;c
         end else begin
-            flush_o <= 0
+            flush_o <= 0;
             valid_o <= in_stall & valid_o;
             if (fire) pipeline_data_out <= pipeline_data_in;
         end

@@ -24,7 +24,7 @@ module pipeline_top (
     wire in_valid_2, in_valid_3;
     wire in_stall_1, in_stall_2;
 
-    assign arbiter_req <= 1;
+    assign arbiter_req = 1;
 
     pipeline_unit pipeline_stage_1 (
         .clk(clk),
