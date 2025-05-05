@@ -1,3 +1,5 @@
+//Modified for pipeline stall
+
 module pipeline_wrapped (
     input  wire        clk,
     input  wire        reset,
@@ -64,10 +66,10 @@ module pipeline_wrapped (
         .in_valid_from_resource(out_valid[0]),
         .pipeline_output(pipeline1_outputs),
         .out_valid_to_resource(_out_valid_1),
-        .arbiter_req(),
-        .resource_input(),
-        .out_stall(),
-        .out_valid_to_consumer()        
+        .arbiter_req(arbiter_req_1),
+        .resource_input(resource_input_1),
+        .out_stall(stall_1),
+        .out_valid_to_consumer(out_valid[0])        
     );
 
     // Instantiate pipeline 2
@@ -82,10 +84,10 @@ module pipeline_wrapped (
         .in_valid_from_resource(out_valid[1]),
         .pipeline_output(pipeline2_outputs),
         .out_valid_to_resource(_out_valid_2),
-        .arbiter_req(),
-        .resource_input(),
-        .out_stall(),
-        .out_valid_to_consumer()        
+        .arbiter_req(arbiter_req_2),
+        .resource_input(resource_input_2),
+        .out_stall(stall_2),
+        .out_valid_to_consumer(out_valid[1])        
     );
 
 endmodule

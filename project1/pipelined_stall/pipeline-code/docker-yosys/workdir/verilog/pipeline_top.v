@@ -1,4 +1,3 @@
-
 //Modified for pipeline stall
 
 module pipeline_top (
