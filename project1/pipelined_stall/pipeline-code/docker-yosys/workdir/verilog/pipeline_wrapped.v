@@ -7,14 +7,16 @@ module pipeline_wrapped (
     input  wire [31:0] pipeline2_inputs,
     input  wire        in_valid_1,
     input  wire        in_valid_2,
+    input  wire        in_stall_1,
+    input  wire        in_stall_2,
     input  wire        flush_1,
     input  wire        flush_2,
     output wire [31:0] pipeline1_outputs,
     output wire [31:0] pipeline2_outputs,
     output wire        out_valid_1,
     output wire        out_valid_2,
-    output wire        stall_1,
-    output wire        stall_2
+    output wire        out_stall_1,
+    output wire        out_stall_2
 );
 
     
@@ -54,7 +56,7 @@ module pipeline_wrapped (
     pipeline_top pipeline_1 (
         .clk(clk),
         .reset(reset),
-        .out_stall_to_producer(stall_1),
+        .out_stall_to_producer(out_stall_1),
         .in_data_from_producer(pipeline1_inputs),
         .in_valid_from_producer(in_valid_1),
         .in_flush_from_producer(in_flush_1),
@@ -63,34 +65,33 @@ module pipeline_wrapped (
         .out_valid_to_resource(pipeline_to_resource_valid_1),
         .out_stall_to_resource(pipeline_to_resource_stall_1),
         .in_data_from_resource(resource_to_pipeline_data_1),
-        .in_valid_from_resource(resoruce_to),
-        .in_flush_from_resource(),
-        .in_stall_from_resource(),
-        .out_data_to_consumer(),
-        .out_valid_to_consumer(),
-        .in_stall_from_consumer()
+        .in_valid_from_resource(resource_to_pipeline_valid_1),
+        .in_flush_from_resource(resource_to_pipeline_flush_1),
+        .in_stall_from_resource(resource_to_pipeline_stall_1),
+        .out_data_to_consumer(pipeline1_outputs),
+        .out_valid_to_consumer(out_valid_1),
+        .in_stall_from_consumer(in_stall_1)
     );
 
     // Instantiate pipeline 2
     pipeline_top pipeline_2 (
         .clk(clk),
         .reset(reset),
-        .out_stall_to_producer(),
-        .in_data_from_producer(),
-        .in_valid_from_producer(),
-        .in_flush_from_producer(),
-        .out_data_to_resource(),
-        .out_flush_to_resource(),
-        .out_valid_to_resource(),
-        .out_stall_to_resource(),
-        .in_data_from_resource(),
-        .in_valid_from_resource(),
-        .in_flush_from_resource(),
-        .in_stall_from_resource(),
-        .out_data_to_consumer(),
-        .out_valid_to_consumer(),
-        .in_stall_from_consumer()
-        
+        .out_stall_to_producer(out_stall_2),
+        .in_data_from_producer(pipeline2_inputs),
+        .in_valid_from_producer(in_valid_2),
+        .in_flush_from_producer(in_flush_2),
+        .out_data_to_resource(pipeline_to_resource_data_2),
+        .out_flush_to_resource(pipeline_to_resource_flush_2),
+        .out_valid_to_resource(pipeline_to_resource_valid_2),
+        .out_stall_to_resource(pipeline_to_resource_stall_2),
+        .in_data_from_resource(resource_to_pipeline_data_2),
+        .in_valid_from_resource(resource_to_pipeline_valid_2),
+        .in_flush_from_resource(resource_to_pipeline_flush_2),
+        .in_stall_from_resource(resource_to_pipeline_stall_2),
+        .out_data_to_consumer(pipeline2_outputs),
+        .out_valid_to_consumer(out_valid_2),
+        .in_stall_from_consumer(in_stall_2)
     );
 
 endmodule

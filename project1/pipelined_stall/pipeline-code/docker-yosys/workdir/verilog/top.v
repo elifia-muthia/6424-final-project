@@ -48,8 +48,10 @@ module top (
         .pipeline2_outputs  (pipeline2_outputs),
         .out_valid_1        (out_valid_1),
         .out_valid_2        (out_valid_2),
-        .stall_1            (stall_1),
-        .stall_2            (stall_2)
+        .out_stall_1            (stall_1),
+        .out_stall_2            (stall_2),
+        .in_stall_1 (1'b0),
+        .in_stall_2(1'b0)
     );
 
     // Instantiate Consumer
