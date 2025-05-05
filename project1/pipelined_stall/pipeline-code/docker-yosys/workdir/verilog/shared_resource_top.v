@@ -39,7 +39,7 @@ module shared_resource_top (
    
     wire bypass_2;
     reg valid_o_2;
-    reg flush_o_1;
+    reg flush_o_2;
     wire enq_2;
     wire deq_2;
     wire [31:0] buffer_data_out_2;
