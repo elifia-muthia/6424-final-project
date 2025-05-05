@@ -61,7 +61,7 @@ module top (
         .pipeline1_outputs  (pipeline1_outputs),
         .pipeline2_outputs  (pipeline2_outputs),
         .valid_1            (out_valid_1),
-        .valid_2            (out_valid_1),
+        .valid_2            (out_valid_2),
         .out_data_1         (out_data_1),
         .out_data_2         (out_data_2)
     );
