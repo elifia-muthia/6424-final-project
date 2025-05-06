@@ -87,7 +87,6 @@ module shared_resource_top (
             flush_o_2 <= 0;
             resource_data_out_1 <= 0;
             resource_data_out_2 <= 0;
-            
         end else begin
             if (in_flush_1) begin
                 flush_o_1 <= 1;
