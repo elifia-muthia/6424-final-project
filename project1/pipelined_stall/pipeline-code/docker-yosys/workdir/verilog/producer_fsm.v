@@ -44,6 +44,7 @@ always @(posedge clk or posedge reset) begin
         if(counter_1[7:0] == 0) begin
             flush_1 <= 1;
             valid_1 <= 0;
+            counter_1 <= counter_1 + 1;
         end
         else begin 
             flush_1 <= 0;
@@ -54,6 +55,7 @@ always @(posedge clk or posedge reset) begin
         if(counter_2[7:0] == 1) begin
             flush_2 <= 1;
             valid_2 <= 0;
+            counter_2 <= counter_2 + 1;
         end
         else begin 
             flush_2 <= 0;
