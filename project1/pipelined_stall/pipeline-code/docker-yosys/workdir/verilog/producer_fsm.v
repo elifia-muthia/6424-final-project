@@ -44,23 +44,23 @@ always @(posedge clk or posedge reset) begin
         if(counter_1[7:0] == 0) begin
             flush_1 <= 1;
             valid_1 <= 0;
-            counter_1 <= counter_1 + 1;
+            counter_1 <= counter_1 + 2;
         end
         else begin 
             flush_1 <= 0;
             valid_1 <= (in_stall_1 & valid_1) ? 1 : fire_1;
-            if (fire_1) counter_1 <= counter_1 + 1;
+            if (fire_1) counter_1 <= counter_1 + 2;
         end
 
         if(counter_2[7:0] == 1) begin
             flush_2 <= 1;
             valid_2 <= 0;
-            counter_2 <= counter_2 + 1;
+            counter_2 <= counter_2 + 2;
         end
         else begin 
             flush_2 <= 0;
             valid_2 <= (in_stall_2 & valid_2) ? 1 : fire_2;
-            if (fire_2) counter_2 <= counter_2 + 1;
+            if (fire_2) counter_2 <= counter_2 + 2;
         end
     end
 end
