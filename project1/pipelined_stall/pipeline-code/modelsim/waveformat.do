@@ -26,7 +26,8 @@ add wave -noupdate -color teal -itemcolor teal -radix unsigned /top_tb/dut/pipel
 add wave -noupdate -color teal -itemcolor teal -radix unsigned /top_tb/dut/pipeline_inst/pipeline_2/pipeline_stage_2/buffer/*
 add wave -noupdate -color lime -itemcolor lime -radix unsigned /top_tb/dut/pipeline_inst/pipeline_2/pipeline_stage_3/*
 add wave -noupdate -color lime -itemcolor lime -radix unsigned /top_tb/dut/pipeline_inst/pipeline_2/pipeline_stage_3/buffer/*
-
+add wave -noupdate -color red -itemcolor red -radix unsigned /top_tb/dut/pipeline_inst/pipeline_2/pipeline_stage_4/*
+add wave -noupdate -color red -itemcolor red -radix unsigned /top_tb/dut/pipeline_inst/pipeline_2/pipeline_stage_4/buffer/*
 
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {304341 ps} 0}
