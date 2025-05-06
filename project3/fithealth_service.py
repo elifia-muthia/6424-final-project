@@ -136,6 +136,10 @@ def fetch_record(user_id):
     keys = ['user_id','timestamp','heart_rate','blood_pressure','notes']
     return jsonify(dict(zip(keys, row)))
 
+@app.route('/', methods=['GET'])
+def root():
+    return 'FitHealth: Hello!', 200
+
 if __name__ == '__main__':
     ctx=('/certs/server.crt','/certs/server.key')
     app.run(host='0.0.0.0',port=443,ssl_context=ctx)
