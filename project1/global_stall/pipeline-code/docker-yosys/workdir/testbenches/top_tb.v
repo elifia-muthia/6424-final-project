@@ -10,6 +10,10 @@ module top_tb();
     wire valid_1, valid_2;
     integer i;
 
+    //Debugging signals
+    wire stall_pipeline;
+    wire flush_pipeline;
+
     //Instantiate DUT
     top dut (
         .clk(clk),
@@ -17,7 +21,9 @@ module top_tb();
         .out_data_1(data_1),
         .out_data_2(data_2),
         .out_valid_1(valid_1),
-        .out_valid_2(valid_2)
+        .out_valid_2(valid_2),
+        .stall_debug(stall_pipeline),     // debug
+        .flush_debug(flush_pipeline)    // debug
     );
 
     //Run the clock
@@ -27,27 +33,31 @@ module top_tb();
 	end
 
     initial begin
-        
-        //Reset the DUT
+        $display("======== Starting Testbench ========");
+        $dumpfile("top_tb.vcd");  // For waveform viewing
+        $dumpvars(0, top_tb);
+
         @(posedge clk);
         reset = 1;
-
-        //Release reset
-        @(negedge clk);
-        reset = 0;
+        $display("[TB] Reset asserted at time %0t", $time);
 
         @(posedge clk);
+        reset = 0;
+        $display("[TB] Reset deasserted at time %0t", $time);
+
+        // Run test for 256 cycles
         for (i = 0; i < 256; i = i + 1) begin
-            $display("Cycle %d: \t Pipeline 1: Data: %d, Valid: %d. \t Pipeline 2: Data: %d, Valid: %d \n", i, data_1, valid_1, data_2, valid_2);
+            $display("Cycle %0d @ %0t ns --> Pipeline 1: Data = %0d, Valid = %b | Pipeline 2: Data = %0d, Valid = %b",
+                     i, $time, data_1, valid_1, data_2, valid_2);
+
+            // Optional debug messages (only if you wire up stall/flush)
+            // $display("       Stall: %b, Flush: %b", stall_pipeline, flush_pipeline);
+
             @(posedge clk);
         end
 
-        $display("Testbench Finished");
-
-
+        $display("======== Testbench Finished ========");
+        $finish;
     end
 
-
-
-    
 endmodule

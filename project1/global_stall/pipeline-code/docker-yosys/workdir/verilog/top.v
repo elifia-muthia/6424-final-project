@@ -2,7 +2,9 @@ module top (
     input wire clk,
     input wire reset,
     output wire [31:0] out_data_1, out_data_2,
-    output wire out_valid_1, out_valid_2
+    output wire out_valid_1, out_valid_2,
+    output wire stall_debug,
+    output wire flush_debug
 );
 
     // Wires connecting producer, pipeline, and consumer
@@ -19,6 +21,10 @@ module top (
 
     assign out_valid_1 = out_valid[0];
     assign out_valid_2 = out_valid[1];
+
+    //debugging signals
+    assign stall_debug = stall_1 | stall_2;   // or expose both separately if needed
+    assign flush_debug = flush_1 | flush_2;   // OR: flush_1 & flush_2 if you only want simultaneous flush
 
     // Instantiate Producer
     producer_fsm producer_inst (
