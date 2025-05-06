@@ -93,7 +93,7 @@ module shared_resource_top (
                 valid_o_1 <= 0;
             end else begin
                 flush_o_1 <= 0;
-                valid_o_1 <= in_stall_1 & valid_o_1 & arbiter_grant_1;
+                valid_o_1 <= (in_stall_1 & valid_o_1) 1 : fire_1;
                 if (fire_1) resource_data_out_1 <= resource_data_out;
             end
 
@@ -102,7 +102,7 @@ module shared_resource_top (
                 valid_o_2 <= 0;
             end else begin
                 flush_o_2 <= 0;
-                valid_o_2 <= in_stall_2 & valid_o_2 & arbiter_grant_2;
+                valid_o_2 <= (in_stall_2 & valid_o_2) 1 : fire_2;
                 if (fire_2) resource_data_out_2 <= resource_data_out;
             end
             
