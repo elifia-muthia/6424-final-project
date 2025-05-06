@@ -40,7 +40,7 @@ module buffer_slots (
             end else if (deq && !buffer_empty) begin
                 buffer_slots[0] <= buffer_slots[1];
                 buffer_slots[1] <= 0;
-                slots_filled <= slots_filled + 1;
+                slots_filled <= slots_filled - 1;
             end
         end
     end
