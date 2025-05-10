@@ -4,7 +4,7 @@ set -euo pipefail
 # 1. Set args
 
 # Default values
-URL="https://34.162.17.79:443"
+URL="https://34.162.127.65:443"
 DURATION=120        
 TOTAL_RPS=30  
 CONC=6 # concurrent live connections
@@ -105,7 +105,6 @@ vegeta attack -insecure -keepalive -targets="$PREFILL_TGT" \
 GET_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.9}")
 POST_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.1}")
 log "-> Steady phase $DURATION s  ($GET_RPS GET/s | $POST_RPS POST/s)"
-START_TS_MS=$(( $(date +%s) * 1000 )) # save time now
 
 vegeta attack -insecure -keepalive -lazy -targets="$STEADY_GET_TGT" \
        -rate="$GET_RPS" -duration="${DURATION}s" -connections "$CONC" \
@@ -130,14 +129,12 @@ jq -s 'add' <(report "$OUTDIR/get.bin"  "GET") \
 log "-> Wrote latency_throughput.json"
 
 # 8. Calculate attestation latency
-KEY_LINE=$(docker logs "$NAME" --timestamps 2>&1 | grep -m1 'KEY_RETRIEVED' || true)
-if [[ -n $KEY_LINE ]]; then
-  KEY_TS_MS=$(date --date="$(cut -d' ' -f1 <<<"$KEY_LINE")" +%s%3N)
-  echo "{\"attestation_ms\":$((KEY_TS_MS-START_TS_MS))}" | tee "$OUTDIR/attestation.json"
-  log "-> Attestation latency captured"
-else
-  echo '{"attestation_ms":null}' | tee "$OUTDIR/attestation.json"
-  log "[!] Attestation marker not found"
+json=$(curl -sk "$URL/metrics")
+START_MS=$(jq -r '.start_time' <<<"$json")
+KEY_MS=$(jq -r '.key_retrieved_ms' <<<"$json")
+
+if [[ "$KEY_MS" != "null" ]]; then
+  echo $(( KEY_MS - START_MS ))   # attestation latency
 fi
 
 # DONE
