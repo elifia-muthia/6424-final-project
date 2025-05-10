@@ -3,6 +3,7 @@ import sqlite3
 import subprocess
 import requests
 import base64, logging
+import time
 import secrets
 from flask import Flask, request, jsonify, abort
 
@@ -14,6 +15,9 @@ app = Flask(__name__)
 TSM_PATH = '/sys/kernel/config/tsm/report/report0'
 QUOTE_FILE = '/data/quote.bin'
 NONCE_SIZE = 64
+
+start_time = int(time.time() * 1000) # starting timestamp (now)
+key_retrieved_ms = None # timestamp after attestation
 
 def get_tdx_quote():
     # 1. Prepare the report directory
@@ -48,6 +52,8 @@ def verify_with_go_tdx_guest():
     # else it's a zero-exit "Success"
 
 def verify_quote_and_get_key():
+    global key_retrieved_ms
+
     # collect the local quote
     quote, nonce = get_tdx_quote()
 
@@ -57,6 +63,9 @@ def verify_quote_and_get_key():
         ['gcloud','secrets','versions','access','latest','--secret=fithealth-sqlcipher-key'],
         stdout=subprocess.PIPE, check=True
     ).stdout.strip().decode('utf-8')
+
+    key_retrieved_ms = int(time.time() * 1000) # record timestamp
+    logging.info("KEY_RETRIEVED %d", key_retrieved_ms) # for docker logs
 
     return encryption_key
 
@@ -83,6 +92,16 @@ def get_db_connection(key_hex):
 # Perform attestation and open encrypted DB
 encryption_key = verify_quote_and_get_key()
 db_conn = get_db_connection(encryption_key)
+
+@app.route('/metrics', methods=['GET'])
+def get_metrics():
+    conn = db_conn
+    row_cnt = conn.execute("SELECT COUNT(*) FROM records").fetchone()[0]
+    return jsonify({
+        "start_time": start_time,
+        "key_retrieved_ms": key_retrieved_ms,   # null until attestation done
+        "records": row_cnt
+    }), 200
 
 @app.route('/fetch_all', methods=['GET'])
 def fetch_all():
