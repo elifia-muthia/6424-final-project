@@ -4,10 +4,10 @@ set -euo pipefail
 # 1. Set args
 
 # Default values
-URL="https://34.162.223.243:443"
+URL="https://34.162.17.79:443"
 DURATION=120        
-TOTAL_RPS=100  
-CONC=64 # concurrent live connections
+TOTAL_RPS=30  
+CONC=6 # concurrent live connections
 PREFILL_USERS=1000
 NAME="fithealth_srv"
 OUTDIR="results/$(date +%s)"
@@ -97,8 +97,8 @@ for i in $(seq 1 $PREFILL_USERS); do
 done
 
 # 5. Prefill data
-log "-> Prefilling … (100 RPS * 10 s)"
-vegeta attack -keepalive -targets="$PREFILL_TGT" \
+log "-> Prefilling …"
+vegeta attack -insecure -keepalive -targets="$PREFILL_TGT" \
        -rate=100 -duration=10s -connections "$CONC" | vegeta report
 
 # 6. Mixed workload (90% GET, 10% POST)
@@ -107,11 +107,11 @@ POST_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.1}")
 log "-> Steady phase $DURATION s  ($GET_RPS GET/s | $POST_RPS POST/s)"
 START_TS_MS=$(($(date +%s%N)/1000000)) # save time now
 
-vegeta attack -keepalive -lazy -targets="$GET_TGT" \
+vegeta attack -insecure -keepalive -lazy -targets="$GET_TGT" \
        -rate="$GET_RPS" -duration="${DURATION}s" -connections "$CONC" \
        | tee "$OUTDIR/get.bin"  >/dev/null & GPID=$!
 
-vegeta attack -keepalive -lazy -targets="$POST_TGT" \
+vegeta attack -insecure -keepalive -lazy -targets="$POST_TGT" \
        -rate="$POST_RPS" -duration="${DURATION}s" -connections "$CONC" \
        | tee "$OUTDIR/post.bin" >/dev/null & PPID=$!
 
