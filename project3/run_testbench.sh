@@ -41,21 +41,7 @@ log "-> Curling root endpoint to verify server is up …"
 /usr/bin/curl -sk --max-time 5 "$URL/" || {
   log "Server unreachable. Aborting."; exit 8; }
 
-# 3. To measure FitHealth container's CPU % usage and Memory utilization per 1 HZ using docker-stats
-log "-> Starting docker-stats sampler"
-STATS_FILE="$OUTDIR/stats.csv"
-echo "timestamp,cpu%,mem_used" >"$STATS_FILE"
-docker run --rm --network=host -v /var/run/docker.sock:/var/run/docker.sock:ro \
-  bash:5 bash -c "
-    while true; do
-      docker stats --no-stream --format '{{.CPUPerc}},{{.MemUsage}}' $NAME |
-      awk -v ts=\$(date +%s) -F',' '{gsub(/%/,\"\",\$1); gsub(/ .*/,\"\",\$2);print ts\",\" \$1\",\" \$2}'
-      sleep 1
-    done" >>"$STATS_FILE" &
-STATS_PID=$!
-trap 'kill $STATS_PID 2>/dev/null || true' EXIT
-
-# 4. Create dummy JSON data to prefill
+# 3. Create dummy JSON data to prefill
 log "-> Generating $PREFILL_USERS JSON bodies"
 BODY_DIR="$OUTDIR/bodies"
 mkdir -p "$BODY_DIR"
@@ -96,12 +82,12 @@ for i in $(seq 1 $PREFILL_USERS); do
   echo "GET  $URL/fetch/$i" >>"$STEADY_GET_TGT"
 done
 
-# 5. Prefill data
+# 4. Prefill data
 log "-> Prefilling …"
 vegeta attack -insecure -keepalive -targets="$PREFILL_TGT" \
        -rate=100 -duration=10s -connections "$CONC" | vegeta report
 
-# 6. Mixed workload (90% GET, 10% POST)
+# 5. Mixed workload (90% GET, 10% POST)
 GET_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.9}")
 POST_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.1}")
 log "-> Steady phase $DURATION s  ($GET_RPS GET/s | $POST_RPS POST/s)"
@@ -117,7 +103,7 @@ vegeta attack -insecure -keepalive -lazy -targets="$STEADY_POST_TGT" \
 wait $GPID $POST_PID
 log "-> Load finished"
 
-# 7. Summary Report
+# 6. Summary Report
 report () {
   vegeta report -type=json "$1" |
   jq --arg ep "$2" \
@@ -134,7 +120,7 @@ jq -s '.' \                       # combine into an array
   | tee "$OUTDIR/latency_throughput.json"
 log "-> Wrote latency_throughput.json"
 
-# 8. Calculate attestation latency
+# 7. Get VM metrics
 json=$(curl -sk "$URL/metrics")
 START_MS=$(jq -r '.start_time' <<<"$json")
 KEY_MS=$(jq -r '.key_retrieved_ms' <<<"$json")
