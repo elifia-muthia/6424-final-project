@@ -84,6 +84,19 @@ def get_db_connection(key_hex):
 encryption_key = verify_quote_and_get_key()
 db_conn = get_db_connection(encryption_key)
 
+@app.route('/fetch_all', methods=['GET'])
+def fetch_all():
+    cur = db_conn.cursor()
+    cur.execute('SELECT * FROM records')
+    rows = cur.fetchall()
+    if not rows:
+        return jsonify([]), 200
+    
+    keys = ['user_id', 'timestamp', 'heart_rate', 'blood_pressure', 'notes']
+    payload = [dict(zip(keys, row)) for row in rows]
+
+    return jsonify(payload), 200
+
 @app.route('/insert', methods=['POST'])
 def insert_record():
     data = request.get_json(silent=True) or {}
