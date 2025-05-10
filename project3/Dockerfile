@@ -48,7 +48,7 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
  && rm -rf /var/lib/apt/lists/*
 
 # 6. Copy application code & placeholder cert dir
-COPY fithealth_service.py /app/fithealth_service.py
+COPY . /app/
 RUN mkdir /certs
 
 # 7. Use venv’s Python by default
