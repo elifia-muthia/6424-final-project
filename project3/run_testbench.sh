@@ -105,17 +105,17 @@ vegeta attack -insecure -keepalive -targets="$PREFILL_TGT" \
 GET_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.9}")
 POST_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.1}")
 log "-> Steady phase $DURATION s  ($GET_RPS GET/s | $POST_RPS POST/s)"
-START_TS_MS=$(($(date +%s%N)/1000000)) # save time now
+START_TS_MS=$(( $(date +%s) * 1000 )) # save time now
 
-vegeta attack -insecure -keepalive -lazy -targets="$GET_TGT" \
+vegeta attack -insecure -keepalive -lazy -targets="$STEADY_GET_TGT" \
        -rate="$GET_RPS" -duration="${DURATION}s" -connections "$CONC" \
        | tee "$OUTDIR/get.bin"  >/dev/null & GPID=$!
 
-vegeta attack -insecure -keepalive -lazy -targets="$POST_TGT" \
+vegeta attack -insecure -keepalive -lazy -targets="$STEADY_POST_TGT" \
        -rate="$POST_RPS" -duration="${DURATION}s" -connections "$CONC" \
-       | tee "$OUTDIR/post.bin" >/dev/null & PPID=$!
+       | tee "$OUTDIR/post.bin" >/dev/null & POST_PID=$!
 
-wait $GPID $PPID
+wait $GPID $POST_PID
 log "-> Load finished"
 
 # 7. Summary Report
