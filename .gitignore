@@ -2,3 +2,11 @@
 /.vscode
 /.cache
 .depend
+project1/global_stall_no_buffer/pipeline-code/modelsim/work/
+project1/global_stall_no_buffer/pipeline-code/modelsim/transcript
+project1/global_stall_no_buffer/pipeline-code/modelsim/top_tb.vcd
+project1/global_stall_no_buffer/pipeline-code/modelsim/vsim.wlf
+project1/global_stall_no_buffer/pipeline-code/modelsim/_info
+project1/global_stall_no_buffer/pipeline-code/modelsim/tb_run
+project1/global_stall_no_buffer/pipeline-code/modelsim/simulation*_output.txt
+project1/global_stall_no_buffer/pipeline-code/modelsim/*.vstf

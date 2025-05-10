@@ -26,7 +26,17 @@ module pipeline_wrapped (
     wire pipeline_to_resource_flush_1, pipeline_to_resource_flush_2;
     wire resource_to_pipeline_flush_1, resource_to_pipeline_flush_2;
 
-    // Instantiate shared resource top with global stall output
+    wire arbiter_grant_1, arbiter_grant_2;
+    wire arbiter_req_1, arbiter_req_2;
+
+        // Pipeline 1 Control
+    assign pipeline_to_resource_valid_1 = in_valid_1;
+    assign pipeline_to_resource_flush_1 = flush_1;
+
+    // Pipeline 2 Control
+    assign pipeline_to_resource_valid_2 = in_valid_2;
+    assign pipeline_to_resource_flush_2 = flush_2;
+
     shared_resource_top resource_top (
         .clk(clk),
         .reset(reset),
@@ -37,7 +47,7 @@ module pipeline_wrapped (
         .in_flush_1(pipeline_to_resource_flush_1),
         .in_flush_2(pipeline_to_resource_flush_2),
         .global_stall(global_stall),
-
+    
         .out_valid_1(resource_to_pipeline_valid_1),
         .out_valid_2(resource_to_pipeline_valid_2),
         .out_data_1(resource_to_pipeline_data_1),

@@ -6,8 +6,8 @@ vlib work
 vmap work work
 
 # Choose the module and testbench you want to test
-set test_module "producer_fsm_tb"      ;# Set your testbench module name here
-set dut_module "producer_fsm" ;# Set the DUT module you want to test here
+set test_module "top_tb"      ;# Set your testbench module name here
+set dut_module "top" ;# Set the DUT module you want to test here
 
 # Clean and recompile
 vdel -lib work -all

@@ -51,7 +51,8 @@ clean_exe:
 		  ../modelsim/top_tb.vcd \
 		  ../modelsim/vsim.wlf \
 		  ../modelsim/_info \
-		  ../modelsim/tb_run
+		  ../modelsim/tb_run \
+		  ../modelsim/simulation_output.txt \
 	@rm -rf ../modelsim/work
 	@echo "Clean complete."
 
