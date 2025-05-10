@@ -142,4 +142,4 @@ def root():
 
 if __name__ == '__main__':
     ctx=('/certs/server.crt','/certs/server.key')
-    app.run(host='0.0.0.0',port=443,ssl_context=ctx)
+    app.run(host='0.0.0.0', port=443, ssl_context=ctx, threaded=True)
