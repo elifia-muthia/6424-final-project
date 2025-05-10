@@ -46,15 +46,13 @@ clean:
 .PHONY: clean_exe
 
 clean_exe:
-	@echo "Cleaning simulation and ModelSim files..."
-	find . -type f \( \
-		-name "modelsim.ini" -o \
-		-name "transcript" -o \
-		-name "waveformat.do" -o \
-		-name "_info" -o \
-		-name "*.vcd" -o \
-		-name "tb_run" \
-	\) -exec rm -f {} +
+	@echo "Cleaning simulation and ModelSim-generated files in ../modelsim..."
+	rm -f ../modelsim/transcript \
+		  ../modelsim/top_tb.vcd \
+		  ../modelsim/vsim.wlf \
+		  ../modelsim/_info \
+		  ../modelsim/tb_run
+	@rm -rf ../modelsim/work
 	@echo "Clean complete."
 
 
