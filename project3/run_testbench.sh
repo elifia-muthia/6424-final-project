@@ -4,7 +4,7 @@ set -euo pipefail
 # 1. Set args
 
 # Default values
-URL="https://34.162.127.65:443"
+URL="https://34.162.17.79:443"
 DURATION=120        
 TOTAL_RPS=30  
 CONC=6 # concurrent live connections
@@ -120,11 +120,17 @@ log "-> Load finished"
 # 7. Summary Report
 report () {
   vegeta report -type=json "$1" |
-  jq --arg ep "$2" '{endpoint:$ep,throughput:.throughput,
-        p50:.latencies["50th"],p95:.latencies["95th"],p99:.latencies["99th"]}'
+  jq --arg ep "$2" \
+     '{endpoint:$ep,
+       throughput:.throughput,
+       p50:.latencies["50th"],
+       p95:.latencies["95th"],
+       p99:.latencies["99th"]}'
 }
-jq -s 'add' <(report "$OUTDIR/get.bin"  "GET") \
-            <(report "$OUTDIR/post.bin" "POST") \
+
+jq -s '.' \                       # combine into an array
+  <(report "$OUTDIR/get.bin"  "GET")  \
+  <(report "$OUTDIR/post.bin" "POST") \
   | tee "$OUTDIR/latency_throughput.json"
 log "-> Wrote latency_throughput.json"
 
