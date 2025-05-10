@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 1. Parse CLI Arguments
+# 1. Set args
+
+# Default values
+URL="https://34.162.223.243:443"
+DURATION=120        
+TOTAL_RPS=100  
+CONC=64 # concurrent live connections
+PREFILL_USERS=1000
+NAME="fithealth_srv"
+OUTDIR="results/$(date +%s)"
+
 # Example:
 #   ./run_bench.sh \
 #       --url https://127.0.0.1:443 \
@@ -11,14 +21,6 @@ set -euo pipefail
 #       --container fithealth_srv \
 #       --outdir results/tdx_run1
 #
-URL="https://34.162.223.243:443"
-DURATION=120        
-TOTAL_RPS=100  
-CONC=64 # concurrent live connections
-PREFILL_USERS=1000
-NAME="fithealth_srv"
-OUTDIR="results/$(date +%s)"
-
 while [[ $# -gt 0 ]]; do
   case $1 in
     --url)         URL="$2"; shift 2 ;;
@@ -32,7 +34,15 @@ while [[ $# -gt 0 ]]; do
 done
 mkdir -p "$OUTDIR"
 
-# 2. To measure FitHealth container's CPU % usage and Memory utilization per 1 HZ
+log(){ printf "%s  %s\n" "$(date '+%H:%M:%S')" "$*"; }
+
+# 2. Test if we can connect
+log "-> Curling root endpoint to verify server is up …"
+/usr/bin/curl -sk --max-time 5 "$URL/" || {
+  log "Server unreachable. Aborting."; exit 8; }
+
+# 3. To measure FitHealth container's CPU % usage and Memory utilization per 1 HZ using docker-stats
+log "-> Starting docker-stats sampler"
 STATS_FILE="$OUTDIR/stats.csv"
 echo "timestamp,cpu%,mem_used" >"$STATS_FILE"
 docker run --rm --network=host -v /var/run/docker.sock:/var/run/docker.sock:ro \
@@ -45,7 +55,8 @@ docker run --rm --network=host -v /var/run/docker.sock:/var/run/docker.sock:ro \
 STATS_PID=$!
 trap 'kill $STATS_PID 2>/dev/null || true' EXIT
 
-# 3. Create dummy JSON to insert
+# 4. Create dummy JSON data to prefill
+log "-> Generating $PREFILL_USERS JSON bodies"
 BODY_DIR="$OUTDIR/bodies"
 mkdir -p "$BODY_DIR"
 for i in $(seq 1 $PREFILL_USERS); do
@@ -59,7 +70,7 @@ for i in $(seq 1 $PREFILL_USERS); do
 EOF
 done
 
-# 4. Prepare requests to send
+# vegeta target files
 PREFILL_TGT="$OUTDIR/prefill.targets"
 STEADY_POST_TGT="$OUTDIR/post.targets"
 STEADY_GET_TGT="$OUTDIR/get.targets"
@@ -85,23 +96,19 @@ for i in $(seq 1 $PREFILL_USERS); do
   echo "GET  $URL/fetch/$i" >>"$STEADY_GET_TGT"
 done
 
-# 5. Set Attestation start time
-START_TS_MS=$(($(date +%s%N)/1000000))
-
-# 6. Prefill data
-echo "Prefilling $PREFILL_USERS users …"
+# 5. Prefill data
+log "-> Prefilling … (100 RPS * 10 s)"
 vegeta attack -keepalive -targets="$PREFILL_TGT" \
-       -rate=200 -duration=5s -connections "$CONC" | vegeta report
+       -rate=100 -duration=10s -connections "$CONC" | vegeta report
 
-### 7. Mixed workload (90% GET, 10% POST)
+# 6. Mixed workload (90% GET, 10% POST)
 GET_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.9}")
 POST_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.1}")
-echo "Steady $DURATION s  (${GET_RPS} GET/s | ${POST_RPS} POST/s)"
-
-START_TS_MS=$(($(date +%s%N)/1000000))   # for attestation latency
+log "-> Steady phase $DURATION s  ($GET_RPS GET/s | $POST_RPS POST/s)"
+START_TS_MS=$(($(date +%s%N)/1000000)) # save time now
 
 vegeta attack -keepalive -lazy -targets="$GET_TGT" \
-       -rate="$GET_RPS"  -duration="${DURATION}s" -connections "$CONC" \
+       -rate="$GET_RPS" -duration="${DURATION}s" -connections "$CONC" \
        | tee "$OUTDIR/get.bin"  >/dev/null & GPID=$!
 
 vegeta attack -keepalive -lazy -targets="$POST_TGT" \
@@ -109,27 +116,29 @@ vegeta attack -keepalive -lazy -targets="$POST_TGT" \
        | tee "$OUTDIR/post.bin" >/dev/null & PPID=$!
 
 wait $GPID $PPID
+log "-> Load finished"
 
-# 8. Latency / Throughput Reports
-summary () {
+# 7. Summary Report
+report () {
   vegeta report -type=json "$1" |
   jq --arg ep "$2" '{endpoint:$ep,throughput:.throughput,
         p50:.latencies["50th"],p95:.latencies["95th"],p99:.latencies["99th"]}'
 }
-jq -s 'add' \
-  <(summary "$OUTDIR/get.bin"  "GET") \
-  <(summary "$OUTDIR/post.bin" "POST") \
+jq -s 'add' <(report "$OUTDIR/get.bin"  "GET") \
+            <(report "$OUTDIR/post.bin" "POST") \
   | tee "$OUTDIR/latency_throughput.json"
+log "-> Wrote latency_throughput.json"
 
-# 9. Calculate attestation latency
+# 8. Calculate attestation latency
 KEY_LINE=$(docker logs "$NAME" --timestamps 2>&1 | grep -m1 'KEY_RETRIEVED' || true)
 if [[ -n $KEY_LINE ]]; then
   KEY_TS_MS=$(date --date="$(cut -d' ' -f1 <<<"$KEY_LINE")" +%s%3N)
   echo "{\"attestation_ms\":$((KEY_TS_MS-START_TS_MS))}" | tee "$OUTDIR/attestation.json"
+  log "-> Attestation latency captured"
 else
   echo '{"attestation_ms":null}' | tee "$OUTDIR/attestation.json"
+  log "[!] Attestation marker not found"
 fi
 
 # DONE
-echo "Done!"
-echo "Results saved under $OUTDIR"
+log "Done. Results in $OUTDIR"
