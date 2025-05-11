@@ -11,6 +11,7 @@ module pipeline_wrapped (
     input  wire        in_stall_2,
     input  wire        flush_1,
     input  wire        flush_2,
+    
     output wire [31:0] pipeline1_outputs,
     output wire [31:0] pipeline2_outputs,
     output wire        out_valid_1,

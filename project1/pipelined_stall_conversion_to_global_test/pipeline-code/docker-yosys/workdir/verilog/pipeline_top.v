@@ -35,12 +35,15 @@ module pipeline_top (
 
 
     pipeline_units_1_to_3 pipeline_stages_1_to_3 (
+        //inputs
         .clk(clk),
         .reset(reset),
         .in_flush(in_flush_from_producer),
         .inputs(in_data_from_producer),
         .in_valid(in_valid_from_producer),
         .in_stall(in_stall_from_resource),
+
+        //outputs
         .outputs(out_data_to_resource), 
         .out_valid(out_valid_to_resource),
         .out_flush(out_flush_to_resource),
@@ -48,12 +51,15 @@ module pipeline_top (
     );
 
     pipeline_unit_buffered pipeline_stage_4 (
+        //inputs
         .clk(clk),
         .reset(reset),
         .in_flush(in_flush_from_resource),
         .inputs(in_data_from_resource),
         .in_valid(in_valid_from_resource),
         .in_stall(in_stall_from_consumer),
+
+        //outputs
         .outputs(out_data_to_consumer), 
         .out_valid(out_valid_to_consumer),
         .out_flush(),

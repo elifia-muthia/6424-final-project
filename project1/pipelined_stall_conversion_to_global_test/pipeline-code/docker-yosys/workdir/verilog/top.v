@@ -22,46 +22,55 @@ module top (
 
     // Instantiate Producer
     producer_fsm producer_inst (
+        //inputs
         .clk               (clk),
         .reset             (reset),
+        .in_stall_1           (stall_1),
+        .in_stall_2           (stall_2),
+
+        //output
         .pipeline1_inputs  (pipeline1_inputs),
         .pipeline2_inputs  (pipeline2_inputs),
         .out_valid_1        (in_valid_1),
         .out_valid_2        (in_valid_2),
         .out_flush_1           (flush_1),
-        .out_flush_2           (flush_2),
-        .in_stall_1           (stall_1),
-        .in_stall_2           (stall_2)
+        .out_flush_2           (flush_2)
     );
 
     // Instantiate Pipeline with Arbiter and Shared Resource
     pipeline_wrapped pipeline_inst (
+        //inputs
         .clk                (clk),
         .reset              (reset),
         .pipeline1_inputs   (pipeline1_inputs),
         .pipeline2_inputs   (pipeline2_inputs),
         .in_valid_1         (in_valid_1),
         .in_valid_2         (in_valid_2),
+        .in_stall_1         (1'b0),
+        .in_stall_2         (1'b0),
         .flush_1            (flush_1),
         .flush_2            (flush_2),
+
+        //outputs
         .pipeline1_outputs  (pipeline1_outputs),
         .pipeline2_outputs  (pipeline2_outputs),
         .out_valid_1        (out_valid_1),
         .out_valid_2        (out_valid_2),
-        .out_stall_1            (stall_1),
-        .out_stall_2            (stall_2),
-        .in_stall_1 (1'b0),
-        .in_stall_2(1'b0)
+        .out_stall_1        (stall_1),
+        .out_stall_2        (stall_2)
     );
 
     // Instantiate Consumer
     consumer_fsm consumer_inst (
+        //inputs
         .clk                (clk),
         .reset              (reset),
         .pipeline1_outputs  (pipeline1_outputs),
         .pipeline2_outputs  (pipeline2_outputs),
         .valid_1            (out_valid_1),
         .valid_2            (out_valid_2),
+
+        //outputs
         .out_data_1         (out_data_1),
         .out_data_2         (out_data_2)
     );

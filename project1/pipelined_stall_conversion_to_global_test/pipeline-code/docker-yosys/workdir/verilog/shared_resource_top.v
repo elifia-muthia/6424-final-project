@@ -110,24 +110,30 @@ module shared_resource_top (
 end
 
     buffer_slots buffer_1 (
+        //inputs
         .clk(clk),
         .reset(reset),
         .flush(in_flush_1),
         .inputs(in_data_1),
         .enq(enq_1),
         .deq(deq_1),
+
+        //outputs
         .outputs(buffer_data_out_1),
         .buffer_empty(buffer_empty_1),
         .buffer_full(buffer_full_1)
     );
 
     buffer_slots buffer_2 (
+        //inputs
         .clk(clk),
         .reset(reset),
         .flush(in_flush_2),
         .inputs(in_data_2),
         .enq(enq_2),
         .deq(deq_2),
+
+        //outputs
         .outputs(buffer_data_out_2),
         .buffer_empty(buffer_empty_2),
         .buffer_full(buffer_full_2)
@@ -135,17 +141,20 @@ end
     
 
     arbiter arbiter_inst (
+        //inputs
         .clk      (clk),
         .reset    (reset),
         .req_1    (arbiter_req_1),
         .req_2    (arbiter_req_2),
+
+        //outputs
         .grant_1  (arbiter_grant_1),
         .grant_2  (arbiter_grant_2)
     );
 
      shared_resource shared_resource_inst (
-        .resource_input  (resource_data_in),
-        .resource_output (resource_data_out)
+        .resource_input  (resource_data_in), //input
+        .resource_output (resource_data_out) //output
     );
 
     // Shared Resource Top Debugging
