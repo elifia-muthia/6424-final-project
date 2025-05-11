@@ -10,8 +10,6 @@ module arbiter (
     output wire grant_2
 );
 
-    
-
     reg cycle;
 
     always @(posedge clk or posedge reset) begin

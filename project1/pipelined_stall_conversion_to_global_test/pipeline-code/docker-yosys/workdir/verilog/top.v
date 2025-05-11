@@ -18,15 +18,16 @@ module top (
     wire in_valid_2;
     wire stall_1;
     wire stall_2;
-
+    wire global_stall_1;
+    wire global_stall_2;
 
     // Instantiate Producer
     producer_fsm producer_inst (
         //inputs
         .clk               (clk),
         .reset             (reset),
-        .in_stall_1           (stall_1),
-        .in_stall_2           (stall_2),
+        .in_stall_1           (global_stall_1),
+        .in_stall_2           (global_stall_2),
 
         //output
         .pipeline1_inputs  (pipeline1_inputs),
@@ -57,7 +58,9 @@ module top (
         .out_valid_1        (out_valid_1),
         .out_valid_2        (out_valid_2),
         .out_stall_1        (stall_1),
-        .out_stall_2        (stall_2)
+        .out_stall_2        (stall_2),
+        .global_stall_1 (global_stall_1),
+        .global_stall_2 (global_stall_2)
     );
 
     // Instantiate Consumer

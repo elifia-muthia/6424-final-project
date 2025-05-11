@@ -8,5 +8,5 @@ project1/*/pipeline-code/modelsim/top_tb.vcd
 project1/*/pipeline-code/modelsim/vsim.wlf
 project1/*/pipeline-code/modelsim/_info
 project1/*/pipeline-code/modelsim/tb_run
-project1/*/pipeline-code/modelsim/simulation*.txt
+project1/*/pipeline-code/modelsim/*.txt
 project1/*/pipeline-code/modelsim/*.vstf
