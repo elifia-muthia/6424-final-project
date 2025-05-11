@@ -3,13 +3,13 @@
 ##################################################
 
 # run using:
-# vsim -c -do "runsimdo_tb.do" > simulation.txt
+# vsim -c -do "runsim_tb.do" > simulation.txt
 
 vlib work 
 vmap work work
 
 # Choose the module and testbench you want to test
-set test_module "top_tb_tb"      ;# Set your testbench module name here
+set test_module "tb_top"      ;# Set your testbench module name here
 set dut_module "top" ;# Set the DUT module you want to test here
 
 # Clean and recompile
@@ -18,7 +18,7 @@ vlib work
 vmap work work
 
 # Include all Verilog files and the chosen testbench
-vlog +acc -incr ../docker-yosys/workdir/testbenches/$test_module.v
+vlog +acc -incr ../docker-yosys/workdir/testbenches/$test_module*.v
 vlog +acc -incr ../docker-yosys/workdir/verilog/*.v
 
 # Run simulation for the chosen testbench
