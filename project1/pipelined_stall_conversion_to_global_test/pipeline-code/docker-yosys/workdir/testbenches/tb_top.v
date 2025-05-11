@@ -35,16 +35,17 @@ module tb_top;
     // Test sequence
     initial begin
         // Initialize
+        // Monitor values
+        $display("[TOB TESTBENCH] | Time: %0t | Out Valid1: %b | Out Data1: %d | Out Valid2: %b | Out Data2: %d", 
+         $time, out_valid_1, out_data_1, out_valid_2, out_data_2);
+
         reset = 1;
         #10;
 
         // Deassert reset
         reset = 0;
         #10;
-
-        // Monitor values
-        $monitor("[TOB TESTBENCH] | Time: %0t | Out Valid1: %b | Out Data1: %d | Out Valid2: %b | Out Data2: %d", 
-         $time, out_valid_1, out_data_1, out_valid_2, out_data_2);
+        $display("============================================================================================");
 
         // Test Scenario 1: Normal Operation (No Stall)
         #100;

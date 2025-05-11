@@ -75,4 +75,26 @@ module top (
         .out_data_2         (out_data_2)
     );
 
+        // Debugging Signal
+    always @(posedge clk) begin
+        if (reset) begin
+            $display("=== [TOP MODULE RESET] ===");
+        end else begin
+            $display("\n=== [TOP MODULE DEBUGGING BEGIN] === | Time: %0t", $time);
+            $display("[PRODUCER] | Valid1: %b | Data1: %h | Flush1: %b | Valid2: %b | Data2: %h | Flush2: %b", 
+                in_valid_1, pipeline1_inputs, flush_1, 
+                in_valid_2, pipeline2_inputs, flush_2);
+            
+            $display("[PIPELINE] | Stall1: %b | Valid1: %b | Output1: %h | Stall2: %b | Valid2: %b | Output2: %h", 
+                stall_1, out_valid_1, pipeline1_outputs, 
+                stall_2, out_valid_2, pipeline2_outputs);
+            
+            $display("[CONSUMER] | Out Data1: %h | Valid1: %b | Out Data2: %h | Valid2: %b", 
+                out_data_1, out_valid_1, 
+                out_data_2, out_valid_2);
+        end
+        $display("=== [TOP MODULE DEBUGGING END] ===");
+        $display("\n");
+    end
+
 endmodule
