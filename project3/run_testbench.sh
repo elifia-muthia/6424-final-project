@@ -7,7 +7,7 @@ set -euo pipefail
 URL="https://34.162.17.79:443"
 DURATION=120        
 TOTAL_RPS=30  
-CONC=6 # concurrent live connections
+CONC=1 # concurrent live connections
 PREFILL_USERS=1000
 NAME="fithealth_srv"
 OUTDIR="results/$(date +%s)"
@@ -79,7 +79,7 @@ done
 
 # GET
 for i in $(seq 1 $PREFILL_USERS); do
-  echo "GET  $URL/fetch/$i" >>"$STEADY_GET_TGT"
+  echo "GET $URL/fetch/$i" >>"$STEADY_GET_TGT"
 done
 
 # 4. Prefill data
@@ -114,10 +114,11 @@ report () {
        p99:.latencies["99th"]}'
 }
 
-jq -s '.' \                       # combine into an array
-  <(report "$OUTDIR/get.bin"  "GET")  \
+jq -s '.' \
+  <(report "$OUTDIR/get.bin"  "GET") \
   <(report "$OUTDIR/post.bin" "POST") \
-  | tee "$OUTDIR/latency_throughput.json"
+| tee "$OUTDIR/latency_throughput.json"
+
 log "-> Wrote latency_throughput.json"
 
 # 7. Get VM metrics
