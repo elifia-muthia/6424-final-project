@@ -148,4 +148,9 @@ end
         .resource_output (resource_data_out)
     );
 
+    // Shared Resource Top Debugging
+always @(posedge clk) begin
+    $display("[SHARED RESOURCE TOP] | Time: %0t | Valid1: %b | Valid2: %b | Out Data1: %d | Out Data2: %d", $time, out_valid_1, out_valid_2, out_data_1, out_data_2);
+end
+
 endmodule

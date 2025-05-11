@@ -45,4 +45,9 @@ module buffer_slots (
         end
     end
 
+    // Buffer Slots Debugging
+always @(posedge clk) begin
+    $display("[BUFFER SLOTS] | Time: %0t | Flush: %b | Enq: %b | Deq: %b | Empty: %b | Full: %b | Inputs: %d | Outputs: %d", $time, flush, enq, deq, buffer_empty, buffer_full, inputs, outputs);
+end
+
 endmodule

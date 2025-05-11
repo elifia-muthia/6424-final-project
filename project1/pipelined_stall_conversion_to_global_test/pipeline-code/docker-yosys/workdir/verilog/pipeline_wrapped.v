@@ -94,4 +94,9 @@ module pipeline_wrapped (
         .in_stall_from_consumer(in_stall_2)
     );
 
+    // Pipeline Wrapped Debugging
+always @(posedge clk) begin
+    $display("[PIPELINE WRAPPED] | Time: %0t | In Valid1: %b | In Valid2: %b | Out Valid1: %b | Out Valid2: %b", $time, in_valid_1, in_valid_2, out_valid_1, out_valid_2);
+end
+
 endmodule
