@@ -59,7 +59,7 @@ always @(posedge clk or posedge reset) begin
         if (in_stall_2) begin
             valid_2 <= valid_2;
         end else begin
-            if (counter_2[7:0] == 0) begin
+            if (counter_2[7:0] == 1) begin
                 flush_2 <= 1;
                 valid_2 <= 0;
             end else begin
