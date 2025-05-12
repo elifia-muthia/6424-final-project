@@ -24,7 +24,7 @@ module buffer_slots (
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin
-            for (i = 0; i < 2; i = i + 1) begin
+            for (i = 0; i < 1; i = i + 1) begin
                 buffer_slots[i] <= 0;
             end
             slots_filled <= 0;
@@ -34,15 +34,20 @@ module buffer_slots (
                     buffer_slots[i] <= 0;
                 end
                 slots_filled <= 0;
-            end else begin
+            end else begin	
+		if (enq && deq) begin
+			buffer_slots[0] <= buffer_slots[1];
+			buffer_slots[1] <= 0;
+			buffer_slots[slots_filled - 1] <= inputs;
+		end
                 // Enqueue Logic
-                if (enq && !buffer_full) begin
+                else if (enq && !buffer_full) begin
                     buffer_slots[slots_filled] <= inputs;
                     slots_filled <= slots_filled + 1;
                 end 
 
                 // Dequeue Logic - Always attempt to dequeue if not empty
-                if (deq && !buffer_empty) begin
+                else if (deq && !buffer_empty) begin
                     buffer_slots[0] <= buffer_slots[1];
                     buffer_slots[1] <= 0;
                     slots_filled <= slots_filled - 1;
@@ -50,10 +55,5 @@ module buffer_slots (
             end
         end
     end
-
-    // Buffer Slots Debugging
-always @(posedge clk) begin
-    $display("[BUFFER SLOTS] | Time: %0t | Flush: %b | Enq: %b | Deq: %b | Empty: %b | Full: %b | Inputs: %d | Outputs: %d", $time, flush, enq, deq, buffer_empty, buffer_full, inputs, outputs);
-end
 
 endmodule
