@@ -33,19 +33,19 @@ module buffer_slots (
                 for (i = 0; i < 2; i = i + 1) begin
                     buffer_slots[i] <= 0;
                 end
-                slots_filled = 0;
+                slots_filled <= 0;
             end else begin
                 // Enqueue Logic
                 if (enq && !buffer_full) begin
                     buffer_slots[slots_filled] <= inputs;
-                    slots_filled = slots_filled + 1;
+                    slots_filled <= slots_filled + 1;
                 end 
 
                 // Dequeue Logic - Always attempt to dequeue if not empty
                 if (deq && !buffer_empty) begin
                     buffer_slots[0] <= buffer_slots[1];
                     buffer_slots[1] <= 0;
-                    slots_filled = slots_filled - 1;
+                    slots_filled <= slots_filled - 1;
                 end
             end
         end
