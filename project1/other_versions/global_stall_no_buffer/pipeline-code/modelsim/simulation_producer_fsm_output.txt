@@ -1,0 +1,334 @@
+Reading pref.tcl
+
+# 2024.2
+
+# do runsim.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# Errors: 0, Warnings: 1
+# Model Technology ModelSim DE vmap 2024.2 Lib Mapping Utility 2024.05 May 20 2024
+# vmap work work 
+# Modifying modelsim.ini
+# top_tb
+# top
+# Model Technology ModelSim DE vmap 2024.2 Lib Mapping Utility 2024.05 May 20 2024
+# vmap work work 
+# Modifying modelsim.ini
+# Model Technology ModelSim DE vlog 2024.2 Compiler 2024.05 May 20 2024
+# Start time: 01:58:39 on May 10,2025
+# vlog "+acc" -incr ../docker-yosys/workdir/testbenches/top_tb.v 
+# -- Compiling module top_tb
+# 
+# Top level modules:
+# 	top_tb
+# End time: 01:58:39 on May 10,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim DE vlog 2024.2 Compiler 2024.05 May 20 2024
+# Start time: 01:58:39 on May 10,2025
+# vlog "+acc" -incr ../docker-yosys/workdir/verilog/arbiter.v ../docker-yosys/workdir/verilog/buffer.v ../docker-yosys/workdir/verilog/consumer_fsm.v ../docker-yosys/workdir/verilog/pipeline_top.v ../docker-yosys/workdir/verilog/pipeline_unit.v ../docker-yosys/workdir/verilog/pipeline_wrapped.v ../docker-yosys/workdir/verilog/producer_fsm.v ../docker-yosys/workdir/verilog/shared_resource.v ../docker-yosys/workdir/verilog/shared_resource_top.v ../docker-yosys/workdir/verilog/top.v 
+# -- Compiling module arbiter
+# -- Compiling module consumer_fsm
+# -- Compiling module pipeline_top
+# -- Compiling module pipeline_unit
+# -- Compiling module pipeline_wrapped
+# -- Compiling module producer_fsm
+# -- Compiling module shared_resource
+# -- Compiling module shared_resource_top
+# -- Compiling module top
+# 
+# Top level modules:
+# 	shared_resource
+# 	top
+# End time: 01:58:40 on May 10,2025, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vsim -c -lib work $test_module -t ps -L work -do "run -all; quit"
+# vsim -c -lib work top_tb -t ps -L work -do "run -all; quit" 
+# Start time: 01:58:40 on May 10,2025
+# //  ModelSim DE 2024.2 May 20 2024 Linux 4.18.0-553.50.1.el8_10.x86_64
+# //
+# // Unpublished work. Copyright 2024 Siemens
+# //
+# // This material contains trade secrets or otherwise confidential information
+# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
+# // "SISW"), or its licensors. Access to and use of this information is strictly
+# // limited as set forth in the Customer's applicable agreements with SISW.
+# //
+# // This material may not be copied, distributed, or otherwise disclosed outside
+# // of the Customer's facilities without the express written permission of SISW,
+# // and may not be used in any way not expressly authorized by SISW.
+# //
+# Loading work.top_tb
+# Loading work.top
+# Loading work.producer_fsm
+# Loading work.pipeline_wrapped
+# Loading work.shared_resource_top
+# Loading work.arbiter
+# Loading work.pipeline_top
+# Loading work.pipeline_unit
+# Loading work.consumer_fsm
+# run -all
+# Time: 0 | Global Stall: 0 | P1_Data:          x | P1_Valid: x | P2_Data:          x | P2_Valid: x | P1_Inputs:          x | P2_Inputs:          x | P1_Flush: x | P2_Flush: x | P1_In_Valid: x | P2_In_Valid: x
+# Producer FSM Debug | Global Stall: x | Valid1: x | Valid2: x | Flush1: x | Flush2: x | Counter1:          x | Counter2:          x
+# Arbiter Debug | Cycle: x | Req1: x | Req2: x | Grant1: x | Grant2: x
+# Shared Resource Debug | Global Stall: x | Valid1: x | Valid2: x | Grant1: x | Grant2: x | Out_Valid1: x | Out_Valid2: x | Out_Data1:          x | Out_Data2:          x
+# Arbiter Debug | Reset: Cycle reset to 0
+# Time: 100000 | Global Stall: 0 | P1_Data:          0 | P1_Valid: 0 | P2_Data:          0 | P2_Valid: 0 | P1_Inputs:          0 | P2_Inputs:          0 | P1_Flush: 0 | P2_Flush: 0 | P1_In_Valid: 0 | P2_In_Valid: 0
+# 
+# [TEST] Scenario 1: Normal Operation (No Stall)
+# 
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           0: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           1: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           2: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           3: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           4: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           5: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           6: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           7: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           8: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           9: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          10: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          11: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          12: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          13: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          14: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          15: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          16: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          17: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          18: Pipelines not producing valid data!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          19: Pipelines not producing valid data!
+# 
+# [TEST] Scenario 2: Global Stall Activated
+# 
+# Time: 4100000 | Global Stall: 1 | P1_Data:          0 | P1_Valid: 0 | P2_Data:          0 | P2_Valid: 0 | P1_Inputs:          0 | P2_Inputs:          0 | P1_Flush: 0 | P2_Flush: 0 | P1_In_Valid: 0 | P2_In_Valid: 0
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle           0: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle           1: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle           2: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle           3: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle           4: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle           5: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle           6: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle           7: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle           8: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle           9: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle          10: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle          11: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle          12: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle          13: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle          14: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle          15: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle          16: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle          17: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle          18: Pipelines frozen as expected.
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [PASS] Cycle          19: Pipelines frozen as expected.
+# 
+# [TEST] Scenario 3: Release Global Stall
+# 
+# Time: 8100000 | Global Stall: 0 | P1_Data:          0 | P1_Valid: 0 | P2_Data:          0 | P2_Valid: 0 | P1_Inputs:          0 | P2_Inputs:          0 | P1_Flush: 0 | P2_Flush: 0 | P1_In_Valid: 0 | P2_In_Valid: 0
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           0: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           1: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           2: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           3: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           4: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           5: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           6: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           7: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           8: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle           9: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          10: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          11: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          12: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          13: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          14: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          15: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          16: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          17: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 0 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          18: Pipelines did not resume!
+# Producer FSM Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Flush1: 0 | Flush2: 0 | Counter1:          1 | Counter2:          2
+# Arbiter Debug | Cycle: 1 | Req1: 0 | Req2: 0 | Grant1: 0 | Grant2: 0
+# Shared Resource Debug | Global Stall: 1 | Valid1: 0 | Valid2: 0 | Grant1: 0 | Grant2: 0 | Out_Valid1: 0 | Out_Valid2: 0 | Out_Data1:          0 | Out_Data2:          0
+# [FAIL] Cycle          19: Pipelines did not resume!
+# 
+# [TEST] Testbench Finished
+# [RESULT] Pass:          20, Fail:          40
+# ** Note: $finish    : ../docker-yosys/workdir/testbenches/top_tb.v(112)
+#    Time: 12100 ns  Iteration: 1  Instance: /top_tb
+# End time: 01:58:40 on May 10,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+Support of the MGLS_LICENSE_FILE and LM_LICENSE_FILE licensing environment variables will be discontinued starting with the 2025.1 release. Please update to using the SALT_LICENSE_SERVER variable.
+Please contact Siemens EDA Customer Support (https://support.sw.siemens.com/) for assistance.

@@ -1,72 +1,74 @@
+//Modified for pipeline stall
+
 module pipeline_top (
     input  wire         clk,
     input  wire         reset,
-    input  wire [31:0]  inputs,
-    input  wire         in_valid,
-    input  wire         flush,
-    input  wire         arbiter_grant,
-    input  wire [31:0]  resource_output,
 
-    output wire [31:0]  outputs,
-    output wire         out_valid,
-    output wire         arbiter_req,
-    output wire [31:0]  resource_input,
-    output wire stall_signal
+    //Signals to Producer
+    output wire         out_stall_to_producer,
+
+    //Signals from Producer
+    input  wire [31:0]  in_data_from_producer,
+    input  wire         in_valid_from_producer,
+    input  wire         in_flush_from_producer,
+
+    //Signals to Shared Resource
+    output wire [31:0]  out_data_to_resource,
+    output wire         out_flush_to_resource,
+    output wire         out_valid_to_resource,
+    output wire         out_stall_to_resource,
+    
+    //Signals from Shared Resource
+    input  wire [31:0]  in_data_from_resource,
+    input  wire         in_valid_from_resource,
+    input  wire         in_flush_from_resource,
+    input  wire         in_stall_from_resource,
+
+    //Signals to Consumer
+    output wire [31:0]  out_data_to_consumer,
+    output wire         out_valid_to_consumer,
+
+    //Signals from Consumer
+    input wire          in_stall_from_consumer
 
 );
 
-    wire [31:0] pipeline_unit_outputs;
-    wire to_stall_mgmt_signal;
-    wire _out_valid;
-    wire buffer_empty;
-    wire out_flush;
 
-    // Assign and manage valid signals
+    pipeline_units_1_to_3 pipeline_stages_1_to_3 (
+        //inputs
+        .clk(clk),
+        .reset(reset),
+        .in_flush(in_flush_from_producer),
+        .inputs(in_data_from_producer),
+        .in_valid(in_valid_from_producer),
+        .in_stall(in_stall_from_resource),
 
-    pipeline_unit pipeline_unit_inst (
-        .clk      (clk),
-        .reset    (reset),
-        .inputs   (inputs),
-        .in_valid (in_valid),
-        .flush    (flush),
-        .stall    (stall_signal),
-        .outputs  (pipeline_unit_outputs),
-        .out_valid(_out_valid),
-        .out_flush(out_flush)
+        //outputs
+        .outputs(out_data_to_resource), 
+        .out_valid(out_valid_to_resource),
+        .out_flush(out_flush_to_resource),
+        .out_stall(out_stall_to_producer)
     );
 
-    buffer_slots buffer_slots_inst (
-        .clk           (clk),
-        .reset         (reset),
-        .inputs        (pipeline_unit_outputs),
-        .in_valid      (_out_valid),
-        .arbiter_grant (arbiter_grant),
-        .outputs       (resource_input),
-        .to_stall_mgmt (to_stall_mgmt_signal),
-        .flush         (out_flush),
-        .out_valid     (out_valid),
-        .buffer_empty (buffer_empty),
-        .arbiter_req (arbiter_req)
-    );
+    pipeline_unit_buffered pipeline_stage_4 (
+        //inputs
+        .clk(clk),
+        .reset(reset),
+        .in_flush(in_flush_from_resource),
+        .inputs(in_data_from_resource),
+        .in_valid(in_valid_from_resource),
+        .in_stall(in_stall_from_consumer),
 
-    stall_mgmt stall_mgmt_inst (
-        .clk           (clk),
-        .reset         (reset),
-        .arbiter_grant   (arbiter_grant),
-        .to_stall_mgmt (to_stall_mgmt_signal),
-        .stall_output  (stall_signal)
+        //outputs
+        .outputs(out_data_to_consumer), 
+        .out_valid(out_valid_to_consumer),
+        .out_flush(),
+        .out_stall(out_stall_to_resource)
     );
-
-    /* flush_mgmt flush_mgmt_inst (
-        .clk               (clk),
-        .reset             (reset),
-        .flush_mgmt_input  (flush),
-        .flush_mgmt_output () // Connect as necessary
-    );
-    */
-    
-    // Use resource_output as necessary within the pipeline logic
-    assign outputs = resource_output;
  
+// Pipeline Top Debugging
+always @(posedge clk) begin
+    $display("[PIPELINE TOP] | Time: %0t | Out Stall to Producer: %b | In Valid: %b | Out Valid: %b", $time, out_stall_to_producer, in_valid_from_producer, out_valid_to_consumer);
+end
 
 endmodule

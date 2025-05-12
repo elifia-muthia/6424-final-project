@@ -1,12 +1,9 @@
-//Modified for pipeline stall
-
 module consumer_fsm (
     input  wire        clk,
     input  wire        reset,
     input  wire [31:0] pipeline1_outputs,
     input  wire [31:0] pipeline2_outputs, 
-    input  wire        valid_1,
-    input  wire        valid_2,
+    input  wire [1:0]  valid,
     output wire [31:0] out_data_1,
     output wire [31:0] out_data_2
 );
@@ -23,20 +20,15 @@ always @(posedge clk or posedge reset) begin
         output_data_2 <= 0;
     end
     else begin
-        if (valid_1) output_data_1 <= pipeline1_outputs;
+        if (valid[0]) output_data_1 <= pipeline1_outputs;
         else output_data_1 <= output_data_1;
 
-        if (valid_2) output_data_2 <= pipeline2_outputs;
+        if (valid[1]) output_data_2 <= pipeline2_outputs;
         else output_data_2 <= output_data_2;
 
     end
 
     
-end
-
-// Consumer FSM Debugging
-always @(posedge clk) begin
-    $display("[CONSUMER FSM] | Time: %0t | Valid1: %b | Valid2: %b | Out Data1: %d | Out Data2: %d", $time, valid_1, valid_2, out_data_1, out_data_2);
 end
 
 endmodule
