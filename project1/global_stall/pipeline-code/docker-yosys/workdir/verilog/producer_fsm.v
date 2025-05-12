@@ -52,7 +52,7 @@ always @(posedge clk or posedge reset) begin
                 flush_1 <= 0;
                 valid_1 <= 1;
             end
-            counter_1 <= counter_1 + 1;
+            counter_1 <= counter_1 + 2;
         end
 
         // Pipeline 2 Control
@@ -66,7 +66,7 @@ always @(posedge clk or posedge reset) begin
                 flush_2 <= 0;
                 valid_2 <= 1;
             end
-            counter_2 <= counter_2 + 1;
+            counter_2 <= counter_2 + 2;
         end
     end
 end
