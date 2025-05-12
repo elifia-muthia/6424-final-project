@@ -36,7 +36,7 @@ assign out_flush = flush_o;
 assign fire = (in_valid | !buffer_empty) & !(in_stall & valid_o);
 assign out_stall = buffer_full;
 assign enq = in_valid & (!fire | !buffer_empty) & !buffer_full;
-assign deq = !buffer_empty & fire;
+assign deq = !buffer_empty & fire & !out_stall;
 assign bypass = buffer_empty;
 
 assign pipeline_data_in = bypass ? inputs : buffer_data_out;

@@ -32,8 +32,8 @@ module pipeline_wrapped (
     //wire global_stall_1, global_stall_2;
 
     // Compute global stall signals for both pipelines
-    assign global_stall_1 = (out_stall_1 | resource_to_pipeline_stall_1 | in_stall_1);
-    assign global_stall_2 = (out_stall_2 | resource_to_pipeline_stall_2 | in_stall_2);
+    assign global_stall_1 = (out_stall_1 | resource_to_pipeline_stall_1);
+    assign global_stall_2 = (out_stall_2 & !resource_to_pipeline_stall_2) | (resource_to_pipeline_stall_2 & !out_stall_2);
 
     // Instantiate shared resource top
    shared_resource_top resource_top (
