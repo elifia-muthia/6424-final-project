@@ -11,16 +11,16 @@ module pipeline_wrapped (
     input  wire        in_stall_2,
     input  wire        flush_1,
     input  wire        flush_2,
-    
     output wire [31:0] pipeline1_outputs,
     output wire [31:0] pipeline2_outputs,
     output wire        out_valid_1,
     output wire        out_valid_2,
     output wire        out_stall_1,
-    output wire        out_stall_2,
-    output wire        global_stall_1,
-    output wire        global_stall_2
+    output wire        out_stall_2
 );
+
+    
+
     wire [31:0] pipeline_to_resource_data_1, pipeline_to_resource_data_2;
     wire [31:0] resource_to_pipeline_data_1, resource_to_pipeline_data_2;
     wire pipeline_to_resource_valid_1, pipeline_to_resource_valid_2;
@@ -29,11 +29,6 @@ module pipeline_wrapped (
     wire resource_to_pipeline_flush_1, resource_to_pipeline_flush_2;
     wire pipeline_to_resource_stall_1, pipeline_to_resource_stall_2;
     wire resource_to_pipeline_stall_1, resource_to_pipeline_stall_2;
-    //wire global_stall_1, global_stall_2;
-
-    // Compute global stall signals for both pipelines
-    assign global_stall_1 = (out_stall_1 & !resource_to_pipeline_stall_1) | (resource_to_pipeline_stall_1 & !out_stall_1);
-    assign global_stall_2 = (out_stall_2 & !resource_to_pipeline_stall_2) | (resource_to_pipeline_stall_2 & !out_stall_2);
 
     // Instantiate shared resource top
    shared_resource_top resource_top (
@@ -98,9 +93,5 @@ module pipeline_wrapped (
         .out_valid_to_consumer(out_valid_2),
         .in_stall_from_consumer(in_stall_2)
     );
-    // Pipeline Wrapped Debugging
-always @(posedge clk) begin
-    $display("[PIPELINE WRAPPED] | Time: %0t | In Valid1: %b | In Valid2: %b | Out Valid1: %b | Out Valid2: %b", $time, in_valid_1, in_valid_2, out_valid_1, out_valid_2);
-end
 
 endmodule
