@@ -66,9 +66,5 @@ module pipeline_top (
         .out_stall(out_stall_to_resource)
     );
  
-// Pipeline Top Debugging
-always @(posedge clk) begin
-    $display("[PIPELINE TOP] | Time: %0t | Out Stall to Producer: %b | In Valid: %b | Out Valid: %b", $time, out_stall_to_producer, in_valid_from_producer, out_valid_to_consumer);
-end
 
 endmodule

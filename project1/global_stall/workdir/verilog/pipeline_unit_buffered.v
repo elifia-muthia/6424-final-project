@@ -73,9 +73,5 @@ always @(posedge clk or posedge reset) begin
     end
 end
 
-// Pipeline Unit Buffered Debugging
-always @(posedge clk) begin
-    $display("[PIPELINE UNIT BUFFERED] | Time: %0t | In Valid: %b | Out Valid: %b | In Stall: %b | Out Stall: %b", $time, in_valid, out_valid, in_stall, out_stall);
-end
 
 endmodule

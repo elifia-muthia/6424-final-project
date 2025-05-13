@@ -34,9 +34,5 @@ always @(posedge clk or posedge reset) begin
     
 end
 
-// Consumer FSM Debugging
-always @(posedge clk) begin
-    $display("[CONSUMER FSM] | Time: %0t | Valid1: %b | Valid2: %b | Out Data1: %d | Out Data2: %d", $time, valid_1, valid_2, out_data_1, out_data_2);
-end
 
 endmodule

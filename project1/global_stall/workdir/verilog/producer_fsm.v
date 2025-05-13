@@ -72,10 +72,5 @@ always @(posedge clk or posedge reset) begin
 end
 
 
-// Producer FSM Debugging
-always @(posedge clk) begin
-    $display("[PRODUCER FSM] | Time: %0t | Stall1: %b | Stall2: %b | Valid1: %b | Valid2: %b | Flush1: %b | Flush2: %b | Counter1: %d | Counter2: %d", 
-             $time, in_stall_1, in_stall_2, valid_1, valid_2, flush_1, flush_2, counter_1, counter_2);
-end
 
 endmodule

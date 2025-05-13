@@ -105,9 +105,4 @@ always @(posedge clk or posedge reset) begin
     end
 end
 
-// Pipeline Units 1 to 3 Debugging
-always @(posedge clk) begin
-    $display("[PIPELINE UNITS 1 TO 3] | Time: %0t | In Valid: %b | Out Valid: %b | In Stall: %b | Out Stall: %b", $time, in_valid, out_valid, in_stall, out_stall);
-end
-
 endmodule

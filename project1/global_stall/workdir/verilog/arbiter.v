@@ -19,9 +19,5 @@ module arbiter (
 
     assign grant_1 = (req_1 & ~req_2) ? 1'b1 : ((req_1 & req_2) ? ~cycle : 1'b0);
     assign grant_2 = (req_2 & ~req_1) ? 1'b1 : ((req_1 & req_2) ? cycle : 1'b0);
-
-    always @(posedge clk) begin
-        $display("[ARBITER] | Time: %0t | Cycle: %b | Req1: %b | Req2: %b | Grant1: %b | Grant2: %b", $time, cycle, req_1, req_2, grant_1, grant_2);
-    end
     
 endmodule
