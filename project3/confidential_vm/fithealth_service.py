@@ -6,7 +6,6 @@ import base64, logging
 import time
 import secrets
 
-from metrics_sampler import latest_sample
 from flask import Flask, request, jsonify, abort
 
 # Configuration
@@ -102,10 +101,7 @@ def get_metrics():
     return jsonify({
         "start_time": start_time,
         "key_retrieved_ms": key_retrieved_ms,   # null until attestation done
-        "records": row_cnt,
-        "cpu_percent": latest_sample.get("cpu_percent"),
-        "mem_bytes":   latest_sample.get("mem_bytes"),
-        "metrics_ts":  latest_sample.get("timestamp_ms")
+        "records": row_cnt
     }), 200
 
 @app.route('/fetch_all', methods=['GET'])

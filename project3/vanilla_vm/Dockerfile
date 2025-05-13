@@ -41,5 +41,9 @@ ENV PATH="/opt/venv/bin:${PATH}"
 # 7. Expose HTTPS port
 EXPOSE 443
 
-# 8. Run the Flask service (with SSL inside)
-CMD ["python", "fithealth_service.py"]
+# 8. Persistent log to record CPU and memory usage
+RUN mkdir -p /var/log && \
+    chown 1000:1000 /var/log
+
+# 9. Run the Flask service (with SSL inside)
+ENTRYPOINT ["python", "fithealth_service.py"]

@@ -1,10 +1,11 @@
-import time, threading, os, pathlib
+import time, threading, pathlib, json
 
 CPU_STAT   = pathlib.Path("/sys/fs/cgroup/cpu.stat")
 MEM_STAT   = pathlib.Path("/sys/fs/cgroup/memory.current")
 INTERVAL_MS = 1            # length of one scheduling slice on x86_64 kernels
 
 latest_sample = {}
+LOG_PATH = "/var/log/metrics.log" # persistent log file
 
 def _read_counters():
     with CPU_STAT.open() as f:
@@ -28,11 +29,21 @@ def _sampler():
         wall_delta   = now - prev_t
         cpu_pct      = cpu_delta_ns / wall_delta * 100
 
-        latest_sample.update({
-            "timestamp_ms": int(now/1e6),
-            "cpu_percent":  round(cpu_pct, 2),
-            "mem_bytes":    mem
-        })
+        sample = {
+            "timestamp_ms": int(now / 1e6),
+            "cpu_percent": round(cpu_pct, 2),
+            "mem_bytes": mem
+        }
+
+        latest_sample.update(sample)
+
+        # Persist sample to log file
+        try:
+            with open(LOG_PATH, 'a') as lf:
+                lf.write(json.dumps(sample) + "\n")
+        except Exception:
+            # Prevent logging failures from stopping the sampler
+            pass
 
         prev_cpu, prev_t = cpu, now
 
