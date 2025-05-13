@@ -5,6 +5,8 @@ RUN apt-get update \
       build-essential \
       libsqlcipher-dev \
       libsqlite3-dev \
+      curl \
+      gnupg \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
