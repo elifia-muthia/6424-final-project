@@ -10,7 +10,8 @@ TOTAL_RPS=50
 CONC=1 # concurrent live connections
 PREFILL_USERS=1000
 NAME="fithealth_srv"
-OUTDIR="results/$(date +%s)"
+TIMESTAMP=$(date +'%Y-%m-%d_%H:%M:%S')
+OUTDIR="results/${TIMESTAMP}"
 
 # Example:
 #   ./run_bench.sh \
@@ -82,14 +83,16 @@ for i in $(seq 1 $PREFILL_USERS); do
   echo "GET $URL/fetch/$i" >>"$STEADY_GET_TGT"
 done
 
+# Set mixed workload (90% GET / 10% POST)
+GET_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.9}")
+POST_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.1}")
+
 # 4. Prefill data
 log "-> Prefilling …"
 vegeta attack -insecure -keepalive -targets="$PREFILL_TGT" \
        -rate="$POST_RPS" -duration=10s -connections "$CONC" | vegeta report
 
-# 5. Mixed workload (90% GET, 10% POST)
-GET_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.9}")
-POST_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.1}")
+# 5. Steady phase
 log "-> Steady phase $DURATION s  ($GET_RPS GET/s | $POST_RPS POST/s)"
 
 vegeta attack -insecure -keepalive -lazy -targets="$STEADY_GET_TGT" \
@@ -104,32 +107,50 @@ wait $GPID $POST_PID
 log "-> Load finished"
 
 # 6. Summary Report
-report () {
+report() {
   vegeta report -type=json "$1" |
   jq --arg ep "$2" \
-     '{endpoint:$ep,
-       throughput:.throughput,
-       p50:.latencies["50th"],
-       p95:.latencies["95th"],
-       p99:.latencies["99th"]}'
+     '{endpoint: $ep,
+       throughput: .throughput,
+       p50: .latencies["50th"],
+       p95: .latencies["95th"],
+       p99: .latencies["99th"]}'
 }
 
-jq -s '.' \
-  <(report "$OUTDIR/get.bin"  "GET") \
-  <(report "$OUTDIR/post.bin" "POST") \
-| tee "$OUTDIR/latency_throughput.json"
+log "-> Generating combined report + metrics JSON…"
 
-log "-> Wrote latency_throughput.json"
+# Gather Vegeta reports
+reports_json=$(jq -s '.' \
+  <( report "$OUTDIR/get.bin"  "GET" ) \
+  <( report "$OUTDIR/post.bin" "POST" )
+)
 
-# 7. Get VM metrics
-json=$(curl -sk "$URL/metrics")
-START_MS=$(jq -r '.start_time' <<<"$json")
-KEY_MS=$(jq -r '.key_retrieved_ms' <<<"$json")
+# Fetch /metrics endpoint
+metrics_json=$(curl -sk "$URL/metrics")
 
+# Extract and compute attestation latency
+START_MS=$(jq -r '.start_time'        <<<"$metrics_json")
+KEY_MS=$(jq -r '.key_retrieved_ms'   <<<"$metrics_json")
+ATT_LAT=$(( KEY_MS - START_MS ))
 
-if [[ "$KEY_MS" != "null" ]]; then
-  echo $(( KEY_MS - START_MS ))   # attestation latency
-fi
+# Build final JSON
+jq -n \
+  --argjson reports "$reports_json" \
+  --argjson metrics "$metrics_json" \
+  --argjson attestation_latency_ms "$ATT_LAT" \
+  '{
+    reports: $reports,
+    metrics: {
+      cpu_utilization_percent:       $metrics.cpu_percent,
+      memory_usage_bytes:            $metrics.mem_bytes,
+      metrics_timestamp_ms:          $metrics.metrics_ts,
+      total_records:                 $metrics.records,
+      start_time_ms:                 $metrics.start_time
+    },
+    attestation_latency_ms: $attestation_latency_ms
+  }' > "$OUTDIR/stats.json"
+
+log "-> Wrote $OUTDIR/stats.json"
 
 # DONE
 log "Done. Results in $OUTDIR"
