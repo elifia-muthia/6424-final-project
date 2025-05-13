@@ -120,4 +120,5 @@ def root():
     return 'FitHealth: Hello!', 200
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, threaded=True)
+    ctx=('/certs/server.crt','/certs/server.key')
+    app.run(host='0.0.0.0', port=443, ssl_context=ctx, threaded=True)
