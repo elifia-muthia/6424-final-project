@@ -50,7 +50,7 @@ echo "Preparing data collection on CPU/Memory usage..."
 mkdir -p /mnt/data
 rm -rf /mnt/data/metrics.log
 touch /mnt/data/metrics.log
-chown root:root /mnt/data/metrics.log
+chmod 666 /mnt/data/metrics.log
 
 echo "Pulling and running FitHealth container over HTTPS..."
 docker pull "${CONTAINER_IMAGE}"

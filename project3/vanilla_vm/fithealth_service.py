@@ -5,6 +5,7 @@ import logging
 import time
 import secrets
 
+import metrics_sampler
 from flask import Flask, request, jsonify, abort
 
 # Configuration
