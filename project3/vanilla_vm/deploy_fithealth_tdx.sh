@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROJECT_ID="fithealthtdx"
+ZONE="us-east5-b"
+INSTANCE_NAME="fithealth-vm"
+MACHINE_TYPE="e2-standard-4"
+IMAGE_PROJECT="ubuntu-os-cloud"
+IMAGE_FAMILY="ubuntu-2204-lts"
+CONTAINER_IMAGE="us-central1-docker.pkg.dev/${PROJECT_ID}/fithealth-repo/fithealth:latest"
+FIREWALL_RULE="allow-fithealth-http"
+
+# 1. Firewall for HTTP port 80
+if ! gcloud compute firewall-rules list --filter="name=${FIREWALL_RULE}" \
+     --format="value(name)" | grep -q "${FIREWALL_RULE}"; then
+  gcloud compute firewall-rules create ${FIREWALL_RULE} \
+    --project=${PROJECT_ID} \
+    --direction=INGRESS \
+    --action=ALLOW \
+    --rules=tcp:80 \
+    --source-ranges=0.0.0.0/0 \
+    --description="Allow HTTP to FitHealth service"
+fi
+
+# 2. Create normal VM (no confidential compute)
+gcloud compute instances create ${INSTANCE_NAME} \
+  --project=${PROJECT_ID} \
+  --zone=${ZONE} \
+  --machine-type=${MACHINE_TYPE} \
+  --image-family=${IMAGE_FAMILY} \
+  --image-project=${IMAGE_PROJECT} \
+  --boot-disk-size=50GB \
+  --metadata-from-file=startup-script=startup_fithealth.sh \
+  --metadata=CONTAINER_IMAGE=${CONTAINER_IMAGE} \
+  --scopes=cloud-platform \
+  --service-account=fithealth-vm-sa@${PROJECT_ID}.iam.gserviceaccount.com
+
+echo "Waiting ~60s for VM initialization..."
+sleep 60
+
+gcloud compute instances describe ${INSTANCE_NAME} --zone=${ZONE}
+echo "Deployment complete."
