@@ -24,7 +24,7 @@ module buffer_slots (
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin
-            for (i = 0; i < 1; i = i + 1) begin
+		for (i = 0; i < 2; i = i + 1) begin
                 buffer_slots[i] <= 0;
             end
             slots_filled <= 0;
