@@ -140,14 +140,7 @@ jq -n \
   --argjson attestation_latency_ms "$ATT_LAT" \
   '{
     reports: $reports,
-    metrics: {
-      cpu_utilization_percent:       $metrics.cpu_percent,
-      memory_usage_bytes:            $metrics.mem_bytes,
-      metrics_timestamp_ms:          $metrics.metrics_ts,
-      total_records:                 $metrics.records,
-      start_time_ms:                 $metrics.start_time
-    },
-    attestation_latency_ms: $attestation_latency_ms
+    start_key_elapsed_ms: $attestation_latency_ms
   }' > "$OUTDIR/stats.json"
 
 log "-> Wrote $OUTDIR/stats.json"

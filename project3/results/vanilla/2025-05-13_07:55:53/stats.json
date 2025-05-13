@@ -15,12 +15,5 @@
       "p99": 22495589104
     }
   ],
-  "metrics": {
-    "cpu_utilization_percent": null,
-    "memory_usage_bytes": null,
-    "metrics_timestamp_ms": null,
-    "total_records": 619,
-    "start_time_ms": 1747137323197
-  },
-  "attestation_latency_ms": 1616
+  "start_key_elapsed_ms": 1616
 }
