@@ -96,7 +96,7 @@ vegeta attack -insecure -keepalive -targets="$PREFILL_TGT" \
 log "-> Steady phase $DURATION s  ($GET_RPS GET/s | $POST_RPS POST/s)"
 
 vegeta attack -insecure -keepalive -lazy -targets="$STEADY_GET_TGT" \
-       -rate="$TOTAL_RPS" -duration="${DURATION}s" -connections "$CONC" \
+       -rate="$GET_RPS" -duration="${DURATION}s" -connections "$CONC" \
        | tee "$OUTDIR/get.bin"  >/dev/null & GPID=$!
 
 vegeta attack -insecure -keepalive -lazy -targets="$STEADY_POST_TGT" \
