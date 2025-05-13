@@ -1,0 +1,26 @@
+{
+  "reports": [
+    {
+      "endpoint": "GET",
+      "throughput": 2.4087425090388974,
+      "p50": 6021532842,
+      "p95": 22731434762,
+      "p99": 30001070340
+    },
+    {
+      "endpoint": "POST",
+      "throughput": 4.7458667570856345,
+      "p50": 95599433,
+      "p95": 10552632155,
+      "p99": 22495589104
+    }
+  ],
+  "metrics": {
+    "cpu_utilization_percent": null,
+    "memory_usage_bytes": null,
+    "metrics_timestamp_ms": null,
+    "total_records": 619,
+    "start_time_ms": 1747137323197
+  },
+  "attestation_latency_ms": 1616
+}
