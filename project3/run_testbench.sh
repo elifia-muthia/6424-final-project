@@ -6,7 +6,7 @@ set -euo pipefail
 # Default values
 URL="https://34.162.17.79:443"
 DURATION=120        
-TOTAL_RPS=30  
+TOTAL_RPS=50  
 CONC=1 # concurrent live connections
 PREFILL_USERS=1000
 NAME="fithealth_srv"
@@ -85,7 +85,7 @@ done
 # 4. Prefill data
 log "-> Prefilling …"
 vegeta attack -insecure -keepalive -targets="$PREFILL_TGT" \
-       -rate=100 -duration=10s -connections "$CONC" | vegeta report
+       -rate="$POST_RPS" -duration=10s -connections "$CONC" | vegeta report
 
 # 5. Mixed workload (90% GET, 10% POST)
 GET_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.9}")
@@ -93,7 +93,7 @@ POST_RPS=$(awk "BEGIN{printf \"%.0f\",$TOTAL_RPS*0.1}")
 log "-> Steady phase $DURATION s  ($GET_RPS GET/s | $POST_RPS POST/s)"
 
 vegeta attack -insecure -keepalive -lazy -targets="$STEADY_GET_TGT" \
-       -rate="$GET_RPS" -duration="${DURATION}s" -connections "$CONC" \
+       -rate="$TOTAL_RPS" -duration="${DURATION}s" -connections "$CONC" \
        | tee "$OUTDIR/get.bin"  >/dev/null & GPID=$!
 
 vegeta attack -insecure -keepalive -lazy -targets="$STEADY_POST_TGT" \
@@ -125,6 +125,7 @@ log "-> Wrote latency_throughput.json"
 json=$(curl -sk "$URL/metrics")
 START_MS=$(jq -r '.start_time' <<<"$json")
 KEY_MS=$(jq -r '.key_retrieved_ms' <<<"$json")
+
 
 if [[ "$KEY_MS" != "null" ]]; then
   echo $(( KEY_MS - START_MS ))   # attestation latency
