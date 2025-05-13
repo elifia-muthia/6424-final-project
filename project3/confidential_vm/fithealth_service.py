@@ -171,7 +171,7 @@ def fetch_record(user_id):
 
 @app.route('/', methods=['GET'])
 def root():
-    return 'FitHealth: Hello!', 200
+    return 'FitHealth-TDX: Hello!', 200
 
 if __name__ == '__main__':
     ctx=('/certs/server.crt','/certs/server.key')
