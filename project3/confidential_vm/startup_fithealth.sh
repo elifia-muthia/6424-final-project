@@ -46,6 +46,12 @@ gsutil cp gs://fithealthtdx-certs/server.crt /certs/server.crt
 gsutil cp gs://fithealthtdx-certs/server.key  /certs/server.key
 chmod 600 /certs/server.key
 
+echo "Preparing data collection on CPU/Memory usage..."
+mkdir -p /mnt/data
+rm -rf /mnt/data/metrics.log
+touch    /mnt/data/metrics.log
+chown    root:root /mnt/data/metrics.log
+
 echo "Pulling and running FitHealth container over HTTPS..."
 docker pull "${CONTAINER_IMAGE}"
 docker run -d \
@@ -56,6 +62,7 @@ docker run -d \
   -e GOOGLE_APPLICATION_CREDENTIALS="/etc/google/auth/application_default_credentials.json" \
   -v /mnt/data:/data \
   -v /certs:/certs:ro \
+  -v /mnt/data/metrics.log:/var/log/metrics.log:rw \
   -p 443:443 \
   "${CONTAINER_IMAGE}"
 
