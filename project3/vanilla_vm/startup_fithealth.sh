@@ -10,6 +10,7 @@ IMAGE_TAG="fithealth:vanilla"
 
 echo "Installing OS prerequisites..."
 apt-get update
+apt-get install --only-upgrade ca-certificates git libcurl4
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
   git \
   apt-transport-https \

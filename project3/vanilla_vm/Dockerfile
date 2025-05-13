@@ -45,5 +45,9 @@ EXPOSE 443
 RUN mkdir -p /var/log && \
     chown 1000:1000 /var/log
 
-# 9. Run the Flask service (with SSL inside)
-ENTRYPOINT ["python", "fithealth_service.py"]
+# 9. Copy metrics sampler program
+COPY metrics_sampler.py /app/metrics_sampler.py
+
+# 10. Run both metrics sampler and the Flask service (with SSL inside)
+ENTRYPOINT ["sh","-c","python /app/metrics_sampler.py --interval_ms 1 --output /var/log/metrics.log & \
+                      python fithealth_service.py"]
