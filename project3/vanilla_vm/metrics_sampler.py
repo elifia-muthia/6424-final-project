@@ -3,14 +3,7 @@ import time, threading, pathlib, json
 CPU_STAT   = pathlib.Path("/sys/fs/cgroup/cpu.stat")
 MEM_STAT   = pathlib.Path("/sys/fs/cgroup/memory.current")
 
-# get scheduling quanta (CFS in ns)
-try:
-    gran_ns = int(pathlib.Path(
-        "/proc/sys/kernel/sched_min_granularity_ns"
-    ).read_text().strip())
-    INTERVAL_MS = gran_ns / 1e6
-except Exception:
-    INTERVAL_MS = 1.0 
+INTERVAL_MS = 1.0 
 
 latest_sample = {}
 LOG_PATH = "/var/log/metrics.log" # persistent log file
