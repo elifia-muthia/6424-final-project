@@ -4,7 +4,7 @@ set -euo pipefail
 # 1. Set args
 
 # Default values
-URL="https://34.162.17.79:443"
+URL=""
 DURATION=120        
 TOTAL_RPS=50  
 CONC=1 # concurrent live connections
