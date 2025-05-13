@@ -57,6 +57,12 @@ chmod 600 /certs/server.key
 echo "Building FitHealth..."
 docker build -t "${IMAGE_TAG}" .
 
+echo "Preparing data collection on CPU/Memory usage..."
+mkdir -p /mnt/data
+rm -rf /mnt/data/metrics.log
+touch    /mnt/data/metrics.log
+chown    $USER /mnt/data/metrics.log
+
 echo "Running the FitHealth container on HTTPS (443)..."
 docker rm -f fithealth 2>/dev/null || true
 docker run -d \
